@@ -1,0 +1,40 @@
+###############################################################################
+#  Repository: mucoll-environment
+#  Tag:        1.0-centos8
+###############################################################################
+
+FROM centos:centos8
+
+RUN yum -y localinstall http://artifacts.pd.infn.it/packages/CAP/misc/CentOS8/noarch/ca_TERENA-SSL-CA-3-1.0-2.el8.noarch.rpm
+
+RUN yum -y install epel-release yum-utils wget && \
+    yum-config-manager --set-enabled PowerTools && \
+    yum-config-manager --set-enabled AppStream && \
+    wget -O /etc/yum.repos.d/geant4.repo http://artifacts.pd.infn.it/packages/MuonColliderSoft/repos/CentOS8/geant4.repo && \
+    wget -O /etc/yum.repos.d/muoncollidersoft.repo http://artifacts.pd.infn.it/packages/MuonColliderSoft/repos/CentOS8/muoncollidersoft.repo
+
+RUN yum -y install vim-enhanced xorg-x11-xauth screen git subversion rsync make \
+                   sshpass zip doxygen rpm-build gcc gcc-c++ patch \
+                   libSM-devel libX11-devel libXext-devel libXft-devel libXmu-devel libXpm-devel \
+                   libjpeg-turbo-devel libpng-devel libtiff-devel mesa-libGLU-devel \
+                   zlib-devel freeglut-devel bzip2 glibc-devel glibc-utils glibc \
+                   glibc-headers glibc-static glibc-common libstdc++-devel expat-devel giflib-devel openmotif-devel \
+                   mysql mysql-devel texlive texlive-xtab texlive-multirow texlive-sectsty texlive-tocloft \
+                   xrootd-devel python3-devel libquadmath-devel binutils-devel libstdc++-devel \
+                   eigen3-devel boost169-devel mesa-dri-drivers mlocate emacs eog \
+                   root root-gdml root-graf3d-eve root-genvector python3-root root-tmva \
+                   root-unuran root-minuit2 root-smatrix gsl-devel geant4-devel clhep-devel
+
+## all datasets in the container !!!!
+RUN geant4-dataset-download
+
+RUN ln -s /usr/bin/python3 /usr/bin/python && \
+    sed -i 's|include_next|include|g' /usr/include/c++/8/cstdlib && \
+    sed -i 's|include_next|include|g' /usr/include/c++/8/bits/std_abs.h && \
+    sed -i 's|include_next|include|g' /usr/include/c++/8/cmath
+
+COPY c++config.h /usr/include/c++/8/x86_64-redhat-linux/bits/c++config.h
+COPY c++config_32.h /usr/include/c++/8/x86_64-redhat-linux/32/bits/c++config.h
+
+
+
