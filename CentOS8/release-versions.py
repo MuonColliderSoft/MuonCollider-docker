@@ -186,7 +186,7 @@ KiTrackMarlin_version = "v01-13"
 
 FCalClusterer_version = "v01-00-01"
 
-ForwardTracking_version = "v01-14"
+ForwardTracking_version = "v01-14-mucoll-01"
 
 ConformalTracking_version = "v01-10"
 

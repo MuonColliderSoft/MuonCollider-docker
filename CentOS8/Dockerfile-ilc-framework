@@ -8,8 +8,6 @@ FROM mucoll-ilc-base:1.0-centos8
 COPY release-ilcsoft.cfg /opt/iLCInstall/releases/development
 COPY release-versions.py /opt/iLCInstall/releases/development
 
-COPY ForwardTracking_CMakeLists.txt /opt/ilcsoft/v02-01-pre/ForwardTracking/v01-14/CMakeLists.txt
-
 RUN cd /opt/iLCInstall && \
     ./ilcsoft-install releases/development/release-ilcsoft.cfg --install-prefix=/opt/ilcsoft -v -i
 
