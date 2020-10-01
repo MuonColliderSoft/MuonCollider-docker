@@ -1,20 +1,17 @@
 ###############################################################################
 #  Repository: mucoll-ilc-framework
-#  Tag:        1.0-centos8
+#  Tag:        1.1-centos8
 ###############################################################################
 
-FROM mucoll-ilc-base:1.0-centos8
-
-COPY release-ilcsoft.cfg /opt/iLCInstall/releases/development
-COPY release-versions.py /opt/iLCInstall/releases/development
+FROM infnpd/mucoll-ilc-base:1.1-centos8
 
 RUN cd /opt/iLCInstall && \
     ./ilcsoft-install releases/development/release-ilcsoft.cfg --install-prefix=/opt/ilcsoft -v -i
 
-RUN cd /opt/ilcsoft/v02-01-pre && \
+RUN cd /opt/ilcsoft/v02-02-MC && \
     git clone https://github.com/MuonColliderSoft/detector-simulation.git
 
-RUN sed -i 's|/bin/env python|/usr/bin/env python2|g' /opt/ilcsoft/v02-01-pre/CEDViewer/v01-17/bin/ced2go
+RUN sed -i 's|/bin/env python|/usr/bin/env python2|g' /opt/ilcsoft/v02-02-MC/CEDViewer/v01-17-01/bin/ced2go
 
 COPY profile.d_ilcsoft.sh /etc/profile.d/ilcsoft.sh
 

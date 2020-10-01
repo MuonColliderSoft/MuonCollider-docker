@@ -1,17 +1,20 @@
 ###############################################################################
 #  Repository: mucoll-environment
-#  Tag:        1.0-centos8
+#  Tag:        1.1-centos8
 ###############################################################################
 
 FROM centos:centos8
 
-RUN yum -y localinstall http://artifacts.pd.infn.it/packages/CAP/misc/CentOS8/noarch/ca_TERENA-SSL-CA-3-1.0-2.el8.noarch.rpm
-
 RUN yum -y install epel-release yum-utils wget && \
     yum-config-manager --set-enabled PowerTools && \
-    yum-config-manager --set-enabled AppStream && \
-    wget -O /etc/yum.repos.d/geant4.repo http://artifacts.pd.infn.it/packages/MuonColliderSoft/repos/CentOS8/geant4.repo && \
-    wget -O /etc/yum.repos.d/muoncollidersoft.repo http://artifacts.pd.infn.it/packages/MuonColliderSoft/repos/CentOS8/muoncollidersoft.repo
+    yum-config-manager --set-enabled AppStream
+
+RUN wget -O /etc/yum.repos.d/EGI-trustanchors.repo http://repository.egi.eu/sw/production/cas/1/current/repo-files/EGI-trustanchors.repo && \
+    yum -y install ca-policy-egi-core && \
+    ln -s /etc/grid-security/certificates/USERTrustRSACertificationAuthority.pem /etc/pki/ca-trust/source/anchors/ && \
+    ln -s /etc/grid-security/certificates/GEANTeScienceSSLCA4.pem /etc/pki/ca-trust/source/anchors/ && \
+    update-ca-trust extract && \
+    wget -O /etc/yum.repos.d/geant4.repo https://cld-smact-02.pd.infn.it/artifacts/repository/repo-files/geant4.repo
 
 RUN yum -y install vim-enhanced xorg-x11-xauth screen git subversion rsync make \
                    sshpass zip doxygen rpm-build gcc gcc-c++ patch \
@@ -23,18 +26,18 @@ RUN yum -y install vim-enhanced xorg-x11-xauth screen git subversion rsync make 
                    xrootd-devel python3-devel libquadmath-devel binutils-devel libstdc++-devel \
                    eigen3-devel boost169-devel mesa-dri-drivers mlocate emacs eog \
                    root root-gdml root-graf3d-eve root-genvector python3-root root-tmva \
+                   root-geom root-graf3d-eve7 root-gui-browserv7 root-tpython \
                    root-unuran root-minuit2 root-smatrix gsl-devel geant4-devel clhep-devel
 
 ## all datasets in the container !!!!
 RUN geant4-dataset-download
 
-RUN ln -s /usr/bin/python3 /usr/bin/python && \
+RUN alternatives --set python /usr/bin/python3 && \
     sed -i 's|include_next|include|g' /usr/include/c++/8/cstdlib && \
     sed -i 's|include_next|include|g' /usr/include/c++/8/bits/std_abs.h && \
     sed -i 's|include_next|include|g' /usr/include/c++/8/cmath
 
 COPY c++config.h /usr/include/c++/8/x86_64-redhat-linux/bits/c++config.h
 COPY c++config_32.h /usr/include/c++/8/x86_64-redhat-linux/32/bits/c++config.h
-
 
 
