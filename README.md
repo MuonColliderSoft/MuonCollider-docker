@@ -12,6 +12,6 @@ docker build -f Dockerfile-ilc-framework -t infnpd/mucoll-ilc-framework:1.1-cent
 
 A useful way to test the image is running a shell on the container:
 ```
-docker run -ti --entrypoint /bin/bash mucoll-ilc-framework:1.0-centos8
+docker run -ti --rm --entrypoint /bin/bash infnpd/mucoll-ilc-framework:1.1-centos8
 ```
 and inspect its content.

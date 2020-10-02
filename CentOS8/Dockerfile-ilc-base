@@ -5,10 +5,10 @@
 
 FROM infnpd/mucoll-environment:1.1-centos8
 
-# TODO missing tag for MuonCutil
 RUN cd /opt && git clone https://github.com/MuonColliderSoft/MuonCutil.git && \
     git clone https://github.com/iLCSoft/iLCInstall.git && \
-    cd iLCInstall && \
+    cd /opt/MuonCutil && git checkout v02-02-MC && \
+    cd /opt/iLCInstall && git checkout v02-02 && \
     sed -i 's|/usr/bin/env python|/usr/bin/env python2|g' ilcsoft-install && \
     mkdir releases/development && \
     cp /opt/MuonCutil/releases/development/* releases/development && \
