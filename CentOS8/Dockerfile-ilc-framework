@@ -15,3 +15,5 @@ RUN sed -i 's|/bin/env python|/usr/bin/env python2|g' /opt/ilcsoft/v02-02-MC/CED
 
 COPY profile.d_ilcsoft.sh /etc/profile.d/ilcsoft.sh
 
+RUN sed -i -e 's|:\$MARLIN_DLL||g' /opt/ilcsoft/v02-02-MC/init_ilcsoft.sh
+
