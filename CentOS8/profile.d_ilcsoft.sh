@@ -1,2 +1,2 @@
-source /opt/ilcsoft/v02-02-MC/init_ilcsoft.sh
+source /opt/ilcsoft/v02-03-MC/init_ilcsoft.sh
 
