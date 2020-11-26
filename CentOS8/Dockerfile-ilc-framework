@@ -8,13 +8,16 @@ FROM infnpd/mucoll-ilc-base:1.3-centos8
 RUN cd /opt/iLCInstall && \
     ./ilcsoft-install releases/development/release-ilcsoft.cfg --install-prefix=/opt/ilcsoft -v -i
 
-RUN cd /opt/ilcsoft/v02-04-MC && \
+RUN cd /opt/ilcsoft/muonc && \
     git clone https://github.com/MuonColliderSoft/detector-simulation.git && \
-    cd /opt/ilcsoft/v02-04-MC/detector-simulation && git checkout v01-00-MC
+    cd /opt/ilcsoft/muonc/detector-simulation && git checkout v01-00-MC
 
-RUN sed -i 's|/bin/env python|/usr/bin/env python2|g' /opt/ilcsoft/v02-04-MC/CEDViewer/v01-17-01/bin/ced2go
+RUN sed -i -e 's|/bin/env python|/usr/bin/env python2|g' /opt/ilcsoft/muonc/CEDViewer/*/bin/ced2go
+
+RUN sed -i -e 's|@DD4HEP_USE_HEPMC3@|OFF|g' /opt/ilcsoft/muonc/DD4hep/*/lib/python3.6/site-packages/DDSim/Helper/HepMC3.py
 
 COPY profile.d_ilcsoft.sh /etc/profile.d/ilcsoft.sh
 
-RUN sed -i -e 's|:\$MARLIN_DLL||g' /opt/ilcsoft/v02-04-MC/init_ilcsoft.sh
+RUN sed -i -e 's|:\$MARLIN_DLL||g' /opt/ilcsoft/muonc/init_ilcsoft.sh
+
 
