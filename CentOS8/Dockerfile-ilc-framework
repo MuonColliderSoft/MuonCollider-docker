@@ -1,9 +1,9 @@
 ###############################################################################
 #  Repository: mucoll-ilc-framework
-#  Tag:        1.4-centos8
+#  Tag:        1.5-centos8
 ###############################################################################
 
-FROM infnpd/mucoll-ilc-base:1.4-centos8
+FROM infnpd/mucoll-ilc-base:1.5-centos8
 
 RUN cd /opt/iLCInstall && \
     ./ilcsoft-install releases/development/release-ilcsoft.cfg --install-prefix=/opt/ilcsoft -v -i
@@ -13,8 +13,6 @@ RUN cd /opt/ilcsoft/muonc && \
     cd /opt/ilcsoft/muonc/detector-simulation && git checkout v01-01-MC
 
 RUN sed -i -e 's|/bin/env python|/usr/bin/env python2|g' /opt/ilcsoft/muonc/CEDViewer/*/bin/ced2go
-
-RUN sed -i -e 's|@DD4HEP_USE_HEPMC3@|OFF|g' /opt/ilcsoft/muonc/DD4hep/*/lib/python3.6/site-packages/DDSim/Helper/HepMC3.py
 
 COPY profile.d_ilcsoft.sh /etc/profile.d/ilcsoft.sh
 

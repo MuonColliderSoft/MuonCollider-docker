@@ -1,13 +1,13 @@
 ###############################################################################
 #  Repository: mucoll-ilc-base
-#  Tag:        1.4-centos8
+#  Tag:        1.5-centos8
 ###############################################################################
 
-FROM infnpd/mucoll-environment:1.4-centos8
+FROM infnpd/mucoll-environment:1.5-centos8
 
 RUN cd /opt && git clone https://github.com/MuonColliderSoft/MuonCutil.git && \
     git clone https://github.com/iLCSoft/iLCInstall.git && \
-    cd /opt/MuonCutil && git checkout v02-05-MC && \
+    cd /opt/MuonCutil && git checkout a01c1660da963d4b7cb299b1dd0e1f0c52164b18 && \
     cd /opt/iLCInstall && git checkout v02-02 && \
     sed -i 's|/usr/bin/env python|/usr/bin/env python2|g' ilcsoft-install && \
     mkdir releases/development && \
