@@ -24,6 +24,6 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           push: true
-          context: CentOS8
-          file: Dockerfile-environment
+          context: ./CentOS8
+          file: ./CentOS8/Dockerfile-environment
           tags: mucoll-environment:test
