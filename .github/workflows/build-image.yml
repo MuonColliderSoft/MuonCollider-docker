@@ -26,7 +26,7 @@ jobs:
           push: true
           context: ./CentOS8
           file: ./CentOS8/Dockerfile-environment
-          tags: kkrizka/mucoll-environment:${{github.sha}}
+          tags: ${{secrets.DOCKERHUB_REPOSITORY}}/mucoll-environment:${{github.sha}}
       -
         name: Build and push mucoll-ilc-base
         id: docker_build_mucoll-ilc-base
@@ -37,7 +37,7 @@ jobs:
           file: ./CentOS8/Dockerfile-environment
           build-args: |
             TAG=${{github.sha}}
-          tags: kkrizka/mucoll-ilc-base:${{github.sha}}
+          tags: ${{secrets.DOCKERHUB_REPOSITORY}}/mucoll-ilc-base:${{github.sha}}
       -
         name: Build and push mucoll-ilc-framework
         id: docker_build_mucoll-ilc-framework
@@ -48,4 +48,4 @@ jobs:
           file: ./CentOS8/Dockerfile-environment
           build-args: |
             TAG=${{github.sha}}
-          tags: kkrizka/mucoll-ilc-framework:${{github.sha}}
+          tags: ${{secrets.DOCKERHUB_REPOSITORY}}/mucoll-ilc-framework:${{github.sha}}
