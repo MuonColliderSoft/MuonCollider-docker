@@ -36,7 +36,7 @@ jobs:
           context: ./CentOS8
           file: ./CentOS8/Dockerfile-environment
           build-args:
-            - TAG: ${{github.sha}}
+            TAG: ${{github.sha}}
           tags: kkrizka/mucoll-ilc-base:${{github.sha}}
       -
         name: Build and push mucoll-ilc-framework
@@ -47,5 +47,5 @@ jobs:
           context: ./CentOS8
           file: ./CentOS8/Dockerfile-environment
           build-args:
-            - TAG: ${{github.sha}}
+            TAG: ${{github.sha}}
           tags: kkrizka/mucoll-ilc-framework:${{github.sha}}
