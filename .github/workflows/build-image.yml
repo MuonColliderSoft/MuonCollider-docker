@@ -26,4 +26,4 @@ jobs:
           push: true
           context: ./CentOS8
           file: ./CentOS8/Dockerfile-environment
-          tags: mucoll-environment:test
+          tags: kkrizka/mucoll-environment:test
