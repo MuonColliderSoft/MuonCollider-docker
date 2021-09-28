@@ -1,9 +1,8 @@
 ###############################################################################
-#  Repository: mucoll-ilc-framework
-#  Tag:        1.5-centos8
+#  Image: mucoll-ilc-framework
 ###############################################################################
 
-FROM infnpd/mucoll-ilc-base:1.5-centos8
+FROM infnpd/mucoll-ilc-base:@TAG@-centos8
 
 RUN cd /opt/iLCInstall && \
     ./ilcsoft-install releases/development/release-ilcsoft.cfg --install-prefix=/opt/ilcsoft -v -i

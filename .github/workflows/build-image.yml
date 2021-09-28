@@ -1,7 +1,7 @@
 name: build-image
 on: [push]
 jobs:
-  build-environment:
+  build:
     runs-on: ubuntu-latest
     steps:
       - 
@@ -19,11 +19,33 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       -
-        name: Build and push
+        name: Build and push mucoll-environment
         id: docker_build
         uses: docker/build-push-action@v2
         with:
           push: true
           context: ./CentOS8
           file: ./CentOS8/Dockerfile-environment
-          tags: kkrizka/mucoll-environment:test
+          tags: kkrizka/mucoll-environment:${{github.sha}}
+      -
+        name: Build and push mucoll-ilc-base
+        id: docker_build
+        uses: docker/build-push-action@v2
+        with:
+          push: true
+          context: ./CentOS8
+          file: ./CentOS8/Dockerfile-environment
+          build-args:
+            - TAG: ${{github.sha}}
+          tags: kkrizka/mucoll-ilc-base:${{github.sha}}
+      -
+        name: Build and push mucoll-ilc-framework
+        id: docker_build
+        uses: docker/build-push-action@v2
+        with:
+          push: true
+          context: ./CentOS8
+          file: ./CentOS8/Dockerfile-environment
+          build-args:
+            - TAG: ${{github.sha}}
+          tags: kkrizka/mucoll-ilc-framework:${{github.sha}}
