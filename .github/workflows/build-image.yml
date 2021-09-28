@@ -2,6 +2,7 @@ name: build-image
 on: [push]
 jobs:
   build-environment:
+    runs-on: ubuntu-latest
     steps:
       -
         name: Set up Docker Buildx
