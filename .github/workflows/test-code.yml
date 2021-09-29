@@ -29,7 +29,8 @@ jobs:
         if: steps.cache-sim.outputs.cache-hit != 'true'
         run: |
           source /opt/ilcsoft/init_ilcsoft.sh
-          echo $PATH
+          echo $PATH | tr : '\n'
+          ls /opt/ilcsoft/muonc/DD4hep/v01-16/bin
           which ddsim
           export
           ddsim --steeringFile test/sim_steer_muonGun_MuColl_v1.py
