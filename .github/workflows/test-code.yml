@@ -11,7 +11,7 @@ on:
 jobs:
   sim:
     runs-on: ubuntu-latest
-    container: kkrizka/mucoll-ilc-framework:v.1.6-centos8
+    container: ${{ secrets.DOCKERHUB_REPOSITORY }}/mucoll-ilc-framework:v.1.6-centos8
     steps:
       - 
         name: Checkout
