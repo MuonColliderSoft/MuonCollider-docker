@@ -10,7 +10,7 @@ on:
       - 'master'
 jobs:
   sim:
-    runs-on: ${{ secrets.DOCKERHUB_REPOSITORY }}/mucoll-ilc-framework:v.1.6-centos8
+    runs-on: kkrizka/mucoll-ilc-framework:v.1.6-centos8
     steps:
       - 
         name: Checkout
