@@ -1,0 +1,23 @@
+name: build-image
+on:
+  push:
+    branches:
+      - 'master'
+    tags:
+      - 'v*'
+  pull_request:
+    branches:
+      - 'master'
+jobs:
+  sim:
+    runs-on: ${{ secrets.DOCKERHUB_REPOSITORY }}/mucoll-ilc-framework:v.1.6-centos8
+    steps:
+      - 
+        name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      -
+        name: Simulate Events
+        run: |
+          ddsim --steeringFile test/sim_steer_muonGun_MuColl_v1.py
