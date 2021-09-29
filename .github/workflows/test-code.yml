@@ -19,7 +19,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: muonGun_sim_MuColl_v1.slcio
-          key: events-${{ hashFiles('test/muonGun_sim_MuColl_v1.slcio') }}
+          key: events-${{ hashFiles('muonGun_sim_MuColl_v1.slcio') }}
       -
         name: Checkout
         uses: actions/checkout@v2
@@ -33,3 +33,20 @@ jobs:
           which ddsim
           export
           ddsim --steeringFile test/sim_steer_muonGun_MuColl_v1.py
+  proc-ACTSTracking:
+    needs: sim
+    runs-on: ubuntu-latest
+    container: kkrizka/mucoll-ilc-framework:v.1.6-centos8
+    steps:
+      -
+        id: cache-sim
+        name: Get simulated events from cache
+        uses: actions/cache@v2
+        with:
+          path: muonGun_sim_MuColl_v1.slcio
+          key: events-${{ hashFiles('muonGun_sim_MuColl_v1.slcio') }}
+      -
+        name: Run ACTSTracking example
+        run: |
+          ls
+          Marlin /opt/ilcsoft/muonc/ACTSTracking/main/example/actsseedckf_seed0_steer.xml --global.LCIOInputFiles=muonGun_sim_MuColl_v1.slcio
