@@ -11,6 +11,7 @@ on:
 jobs:
   sim:
     runs-on: ubuntu-latest
+    container: kkrizka/mucoll-ilc-framework:v.1.6-centos8
     steps:
       - 
         name: Checkout
@@ -19,6 +20,5 @@ jobs:
           fetch-depth: 0
       -
         name: Simulate Events
-        container: kkrizka/mucoll-ilc-framework:v.1.6-centos8
         run: |
           ddsim --steeringFile test/sim_steer_muonGun_MuColl_v1.py
