@@ -28,7 +28,7 @@ jobs:
       - name: Simulate Events
         if: steps.cache-sim.outputs.cache-hit != 'true'
         run: |
-          source /opt/ilcsoft/init_ilcsoft.sh
+          source /opt/ilcsoft/muonc/init_ilcsoft.sh
           echo $PATH | tr : '\n'
           ls /opt/ilcsoft/muonc/DD4hep/v01-16/bin
           which ddsim
@@ -49,5 +49,6 @@ jobs:
       -
         name: Run ACTSTracking example
         run: |
+          source /opt/ilcsoft/muonc/init_ilcsoft.sh
           ls
           Marlin /opt/ilcsoft/muonc/ACTSTracking/main/example/actsseedckf_seed0_steer.xml --global.LCIOInputFiles=muonGun_sim_MuColl_v1.slcio
