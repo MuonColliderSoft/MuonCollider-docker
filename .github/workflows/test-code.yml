@@ -1,4 +1,4 @@
-name: build-image
+name: Test Marlin Processors
 on:
   push:
     branches:
