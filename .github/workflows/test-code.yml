@@ -15,7 +15,7 @@ jobs:
     steps:
       -
         id: cache-sim
-        name: Simulated events cache
+        name: Prepare event simulation cache
         uses: actions/cache@v2
         with:
           path: muonGun_sim_MuColl_v1.slcio
@@ -29,4 +29,7 @@ jobs:
         if: steps.cache-sim.outputs.cache-hit != 'true'
         run: |
           source /opt/ilcsoft/init_ilcsoft.sh
+          echo $PATH
+          which ddsim
+          export
           ddsim --steeringFile test/sim_steer_muonGun_MuColl_v1.py
