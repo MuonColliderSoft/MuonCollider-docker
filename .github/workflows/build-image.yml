@@ -31,7 +31,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v3
         with:
-          image: ${{ secrets.DOCKERHUB_REPOSITORY }}/mucoll-dummy
+          images: ${{ secrets.DOCKERHUB_REPOSITORY }}/mucoll-dummy
       -
         name: Build and Push (mucoll-environment)
         id: docker_build_mucoll-environment
