@@ -15,11 +15,11 @@ jobs:
     steps:
       -
         id: cache-sim
-        name: Prepare event simulation cache
+        name: Cache Event Simulation
         uses: actions/cache@v2
         with:
-          path: muonGun_sim_MuColl_v1.slcio
-          key: events-${{ hashFiles('muonGun_sim_MuColl_v1.slcio') }}
+          path: ./muonGun_sim_MuColl_v1.slcio
+          key: events-${{ hashFiles('test/sim_steer_muonGun_MuColl_v1.py') }}
       -
         name: Checkout
         uses: actions/checkout@v2
@@ -29,11 +29,8 @@ jobs:
         if: steps.cache-sim.outputs.cache-hit != 'true'
         run: |
           source /opt/ilcsoft/muonc/init_ilcsoft.sh
-          echo $PATH | tr : '\n'
-          ls /opt/ilcsoft/muonc/DD4hep/v01-16/bin
-          which ddsim
-          export
           ddsim --steeringFile test/sim_steer_muonGun_MuColl_v1.py
+          ls
   proc-ACTSTracking:
     needs: sim
     runs-on: ubuntu-latest
@@ -41,11 +38,11 @@ jobs:
     steps:
       -
         id: cache-sim
-        name: Get simulated events from cache
+        name: Cache Event Simulation
         uses: actions/cache@v2
         with:
           path: muonGun_sim_MuColl_v1.slcio
-          key: events-${{ hashFiles('muonGun_sim_MuColl_v1.slcio') }}
+          key: events-${{ hashFiles('test/sim_steer_muonGun_MuColl_v1.py') }}
       -
         name: Run ACTSTracking example
         run: |
