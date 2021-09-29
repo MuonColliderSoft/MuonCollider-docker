@@ -1,9 +1,10 @@
 ###############################################################################
-#  Repository: mucoll-ilc-framework
-#  Tag:        1.5-centos8
+#  Image: mucoll-ilc-framework
 ###############################################################################
 
-FROM infnpd/mucoll-ilc-base:1.5-centos8
+ARG VERSION=devel
+ARG REPOSITORY=infnpd
+FROM ${REPOSITORY}/mucoll-ilc-base:${VERSION}-centos8
 
 RUN cd /opt/iLCInstall && \
     ./ilcsoft-install releases/development/release-ilcsoft.cfg --install-prefix=/opt/ilcsoft -v -i
@@ -15,5 +16,3 @@ RUN cd /opt/ilcsoft/muonc && \
 RUN sed -i -e 's|/bin/env python|/usr/bin/env python2|g' /opt/ilcsoft/muonc/CEDViewer/*/bin/ced2go
 
 COPY profile.d_ilcsoft.sh /etc/profile.d/ilcsoft.sh
-
-

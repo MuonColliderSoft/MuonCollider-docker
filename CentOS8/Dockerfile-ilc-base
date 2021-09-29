@@ -1,9 +1,10 @@
 ###############################################################################
-#  Repository: mucoll-ilc-base
-#  Tag:        1.5-centos8
+#  Image: mucoll-ilc-base
 ###############################################################################
 
-FROM infnpd/mucoll-environment:1.5-centos8
+ARG VERSION=devel
+ARG REPOSITORY=infnpd
+FROM ${REPOSITORY}/mucoll-environment:${VERSION}-centos8
 
 RUN cd /opt && git clone https://github.com/MuonColliderSoft/MuonCutil.git && \
     git clone https://github.com/MuonColliderSoft/iLCInstall.git && \
