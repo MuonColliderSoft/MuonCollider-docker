@@ -17,7 +17,7 @@ SIM.inputFiles = []
 ## Macro file to execute for runType 'run' or 'vis'
 SIM.macroFile = []
 ## number of events to simulate, used in batch mode
-SIM.numberOfEvents = 1000
+SIM.numberOfEvents = 10
 ## Outputfile from the simulation,only lcio output is supported
 SIM.outputFile = "muonGun_sim_MuColl_v1.slcio"
 ## Verbosity use integers from 1(most) to 7(least) verbose

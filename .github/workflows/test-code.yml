@@ -11,14 +11,22 @@ on:
 jobs:
   sim:
     runs-on: ubuntu-latest
-    container: ${{ secrets.DOCKERHUB_REPOSITORY }}/mucoll-ilc-framework:v.1.6-centos8
+    container: kkrizka/mucoll-ilc-framework:v.1.6-centos8
     steps:
-      - 
+      -
+        id: cache-sim
+        name: Simulated events cache
+        uses: actions/cache@v2
+        with:
+          path: muonGun_sim_MuColl_v1.slcio
+          key: events-${{ hashFiles('test/muonGun_sim_MuColl_v1.slcio') }}
+      -
         name: Checkout
         uses: actions/checkout@v2
         with:
           fetch-depth: 0
-      -
-        name: Simulate Events
+      - name: Simulate Events
+        if: steps.cache-sim.outputs.cache-hit != 'true'
         run: |
+          source /opt/ilcsoft/init_ilcsoft.sh
           ddsim --steeringFile test/sim_steer_muonGun_MuColl_v1.py
