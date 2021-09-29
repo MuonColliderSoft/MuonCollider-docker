@@ -27,11 +27,9 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       -
-        name: Docker Meta (mucoll-environment)
+        name: Docker Meta
         id: meta
         uses: docker/metadata-action@v3
-        with:
-          images: ${{ secrets.DOCKERHUB_REPOSITORY }}/mucoll-environment
       -
         name: Build and Push (mucoll-environment)
         id: docker_build_mucoll-environment
@@ -40,10 +38,9 @@ jobs:
           push: true
           context: ./CentOS8
           file: ./CentOS8/Dockerfile-environment
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
+          tags: ${{ secrets.DOCKERHUB_REPOSITORY }}/mucoll-environment:${{steps.meta.outputs.version}}-centos8
       -
-        name: Build and push mucoll-ilc-base
+        name: Build and Push (mucoll-ilc-base)
         id: docker_build_mucoll-ilc-base
         uses: docker/build-push-action@v2
         with:
@@ -51,10 +48,11 @@ jobs:
           context: ./CentOS8
           file: ./CentOS8/Dockerfile-ilc-base
           build-args: |
-            TAG=${{github.sha}}
-          tags: ${{secrets.DOCKERHUB_REPOSITORY}}/mucoll-ilc-base:${{github.sha}}
+            VERSION=${{ steps.meta.outputs.version }}
+            REPOSITORY=${{ secrets.DOCKERHUB_REPOSITORY }}
+          tags: ${{ secrets.DOCKERHUB_REPOSITORY }}/mucoll-ilc-base:${{steps.meta.outputs.version}}-centos8
       -
-        name: Build and push mucoll-ilc-framework
+        name: Build and Push (mucoll-ilc-framework)
         id: docker_build_mucoll-ilc-framework
         uses: docker/build-push-action@v2
         with:
@@ -62,5 +60,6 @@ jobs:
           context: ./CentOS8
           file: ./CentOS8/Dockerfile-ilc-framework
           build-args: |
-            TAG=${{github.sha}}
-          tags: ${{secrets.DOCKERHUB_REPOSITORY}}/mucoll-ilc-framework:${{github.sha}}
+            VERSION=${{ steps.meta.outputs.version }}
+            REPOSITORY=${{ secrets.DOCKERHUB_REPOSITORY }}
+          tags: ${{ secrets.DOCKERHUB_REPOSITORY }}/mucoll-ilc-framework:${{steps.meta.outputs.version}}-centos8
