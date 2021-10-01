@@ -11,7 +11,7 @@ on:
 jobs:
   sim:
     runs-on: ubuntu-latest
-    container: kkrizka/mucoll-ilc-framework:v.1.6-centos8
+    container: kkrizka/mucoll-ilc-framework:pr-2-centos8
     steps:
       -
         name: Checkout
@@ -30,10 +30,10 @@ jobs:
         run: |
           source /opt/ilcsoft/muonc/init_ilcsoft.sh
           ddsim --steeringFile test/sim_steer_muonGun_MuColl_v1.py
-  proc-ACTSTracking:
+  proc-ACTSTracking-truth:
     needs: sim
     runs-on: ubuntu-latest
-    container: kkrizka/mucoll-ilc-framework:v.1.6-centos8
+    container: kkrizka/mucoll-ilc-framework:pr-2-centos8
     steps:
       -
         name: Checkout
@@ -51,4 +51,70 @@ jobs:
         name: Run ACTSTracking example
         run: |
           source /opt/ilcsoft/muonc/init_ilcsoft.sh
-          Marlin /opt/ilcsoft/muonc/ACTSTracking/main/example/actsseedckf_seed0_steer.xml --global.LCIOInputFiles=muonGun_sim_MuColl_v1.slcio
+          Marlin /opt/ilcsoft/muonc/ACTSTracking/main/share/ACTSTracking/example/actstruth_steer.xml --global.LCIOInputFiles=muonGun_sim_MuColl_v1.slcio
+  proc-ACTSTracking-truthckf:
+    needs: sim
+    runs-on: ubuntu-latest
+    container: kkrizka/mucoll-ilc-framework:pr-2-centos8
+    steps:
+      -
+        name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      -
+        id: cache-sim
+        name: Cache Event Simulation
+        uses: actions/cache@v2
+        with:
+          path: muonGun_sim_MuColl_v1.slcio
+          key: events-${{ hashFiles('test/sim_steer_muonGun_MuColl_v1.py') }}
+      -
+        name: Run ACTSTracking example
+        run: |
+          source /opt/ilcsoft/muonc/init_ilcsoft.sh
+          Marlin /opt/ilcsoft/muonc/ACTSTracking/main/share/ACTSTracking/example/actstruthckf_steer.xml --global.LCIOInputFiles=muonGun_sim_MuColl_v1.slcio
+  proc-ACTSTracking-seed:
+    needs: sim
+    runs-on: ubuntu-latest
+    container: kkrizka/mucoll-ilc-framework:pr-2-centos8
+    steps:
+      -
+        name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      -
+        id: cache-sim
+        name: Cache Event Simulation
+        uses: actions/cache@v2
+        with:
+          path: muonGun_sim_MuColl_v1.slcio
+          key: events-${{ hashFiles('test/sim_steer_muonGun_MuColl_v1.py') }}
+      -
+        name: Run ACTSTracking example
+        run: |
+          source /opt/ilcsoft/muonc/init_ilcsoft.sh
+          Marlin /opt/ilcsoft/muonc/ACTSTracking/main/share/ACTSTracking/example/actsseed_steer.xml --global.LCIOInputFiles=muonGun_sim_MuColl_v1.slcio
+  proc-ACTSTracking-seedckf:
+    needs: sim
+    runs-on: ubuntu-latest
+    container: kkrizka/mucoll-ilc-framework:pr-2-centos8
+    steps:
+      -
+        name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      -
+        id: cache-sim
+        name: Cache Event Simulation
+        uses: actions/cache@v2
+        with:
+          path: muonGun_sim_MuColl_v1.slcio
+          key: events-${{ hashFiles('test/sim_steer_muonGun_MuColl_v1.py') }}
+      -
+        name: Run ACTSTracking example
+        run: |
+          source /opt/ilcsoft/muonc/init_ilcsoft.sh
+          Marlin /opt/ilcsoft/muonc/ACTSTracking/main/share/ACTSTracking/example/actsseedckf_steer.xml --global.LCIOInputFiles=muonGun_sim_MuColl_v1.slcio
