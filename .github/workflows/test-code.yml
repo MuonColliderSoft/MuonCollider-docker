@@ -11,7 +11,7 @@ on:
 jobs:
   sim:
     runs-on: ubuntu-latest
-    #container: kkrizka/mucoll-ilc-framework:pr-2-centos8
+    container: kkrizka/mucoll-ilc-framework:pr-2-centos8
     steps:
       -
         name: Checkout
@@ -44,7 +44,7 @@ jobs:
         name: Cache Event Simulation
         uses: actions/cache@v2
         with:
-          path: muonGun_sim_MuColl_v1.slcio
+          path: ./muonGun_sim_MuColl_v1.slcio
           key: events-${{ hashFiles('test/sim_steer_muonGun_MuColl_v1.py') }}
       -
         name: Run ACTSTracking example
@@ -65,7 +65,7 @@ jobs:
         name: Cache Event Simulation
         uses: actions/cache@v2
         with:
-          path: muonGun_sim_MuColl_v1.slcio
+          path: ./muonGun_sim_MuColl_v1.slcio
           key: events-${{ hashFiles('test/sim_steer_muonGun_MuColl_v1.py') }}
       -
         name: Run ACTSTracking example
@@ -86,7 +86,7 @@ jobs:
         name: Cache Event Simulation
         uses: actions/cache@v2
         with:
-          path: muonGun_sim_MuColl_v1.slcio
+          path: ./muonGun_sim_MuColl_v1.slcio
           key: events-${{ hashFiles('test/sim_steer_muonGun_MuColl_v1.py') }}
       -
         name: Run ACTSTracking example
@@ -96,7 +96,7 @@ jobs:
   proc-ACTSTracking-seedckf:
     needs: sim
     runs-on: ubuntu-latest
-    #container: kkrizka/mucoll-ilc-framework:pr-2-centos8
+    container: kkrizka/mucoll-ilc-framework:pr-2-centos8
     steps:
       -
         name: Checkout
@@ -107,7 +107,7 @@ jobs:
         name: Cache Event Simulation
         uses: actions/cache@v2
         with:
-          path: muonGun_sim_MuColl_v1.slcio
+          path: ./muonGun_sim_MuColl_v1.slcio
           key: events-${{ hashFiles('test/sim_steer_muonGun_MuColl_v1.py') }}
       -
         name: Run ACTSTracking example
