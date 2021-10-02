@@ -11,7 +11,7 @@ on:
 jobs:
   sim:
     runs-on: ubuntu-latest
-    container: kkrizka/mucoll-ilc-framework:pr-2-centos8
+    #container: kkrizka/mucoll-ilc-framework:pr-2-centos8
     steps:
       -
         name: Checkout
@@ -41,7 +41,6 @@ jobs:
         with:
           fetch-depth: 0
       -
-        id: cache-sim
         name: Cache Event Simulation
         uses: actions/cache@v2
         with:
@@ -63,7 +62,6 @@ jobs:
         with:
           fetch-depth: 0
       -
-        id: cache-sim
         name: Cache Event Simulation
         uses: actions/cache@v2
         with:
@@ -85,7 +83,6 @@ jobs:
         with:
           fetch-depth: 0
       -
-        id: cache-sim
         name: Cache Event Simulation
         uses: actions/cache@v2
         with:
@@ -99,7 +96,7 @@ jobs:
   proc-ACTSTracking-seedckf:
     needs: sim
     runs-on: ubuntu-latest
-    container: kkrizka/mucoll-ilc-framework:pr-2-centos8
+    #container: kkrizka/mucoll-ilc-framework:pr-2-centos8
     steps:
       -
         name: Checkout
@@ -107,7 +104,6 @@ jobs:
         with:
           fetch-depth: 0
       -
-        id: cache-sim
         name: Cache Event Simulation
         uses: actions/cache@v2
         with:
