@@ -79,8 +79,19 @@ jobs:
   sim:
     needs: build
     runs-on: ubuntu-latest
-    container: kkrizka/mucoll-ilc-framework:${{ github.sha }}-centos8
     steps:
+      -
+        id: cache-image
+        name: Cache Built Image
+        uses: actions/cache@v2
+        with:
+          path: /tmp/myimage.tar
+          key: ${{ github.sha }}
+      -
+        name: Load image
+        run: |
+          docker load --input /tmp/myimage.tar
+          docker image ls -a
       -
         name: Checkout
         uses: actions/checkout@v2
