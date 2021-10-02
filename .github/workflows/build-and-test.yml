@@ -79,7 +79,7 @@ jobs:
   sim:
     needs: build
     runs-on: ubuntu-latest
-    container: ${{ secrets.DOCKERHUB_REPOSITORY }}/mucoll-ilc-framework:pr-2-centos8
+    container: kkrizka/mucoll-ilc-framework:${{ github.sha }}-centos8
     steps:
       -
         name: Checkout
