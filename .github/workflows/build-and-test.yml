@@ -14,13 +14,6 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      -
-        id: cache-image
-        name: Cache Built Image
-        uses: actions/cache@v2
-        with:
-          path: /tmp/myimage.tar
-          key: ${{ github.sha }}
       - 
         name: Checkout
         uses: actions/checkout@v2
@@ -73,26 +66,13 @@ jobs:
           build-args: |
             VERSION=${{ steps.meta.outputs.version }}
             REPOSITORY=${{ secrets.DOCKERHUB_REPOSITORY }}
-          tags: ${{ secrets.DOCKERHUB_REPOSITORY }}/mucoll-ilc-framework:${{steps.meta.outputs.version}}-centos8
-          outputs: type=docker,dest=/tmp/myimage.tar
+          tags: ${{ secrets.DOCKERHUB_REPOSITORY }}/mucoll-ilc-framework:${{steps.meta.outputs.version}}-centos8 ${{ secrets.DOCKERHUB_REPOSITORY }}/mucoll-ilc-framework:${{github.sha}}-centos8
 #
 # Generate test events
   sim:
-    needs: build
+#    needs: build
     runs-on: ubuntu-latest
     steps:
-      -
-        id: cache-image
-        name: Cache Built Image
-        uses: actions/cache@v2
-        with:
-          path: /tmp/myimage.tar
-          key: ${{ github.sha }}
-      -
-        name: Load image
-        run: |
-          docker load --input /tmp/myimage.tar
-          docker image ls -a
       -
         name: Checkout
         uses: actions/checkout@v2
@@ -108,8 +88,10 @@ jobs:
       - name: Simulate Events
         if: steps.cache-sim.outputs.cache-hit != 'true'
         run: |
-          source /opt/ilcsoft/muonc/init_ilcsoft.sh
-          ddsim --steeringFile test/sim_steer_muonGun_MuColl_v1.py
+          docker run -v ${PWD}:/var/myrun -w /var/myrun ${{ secrets.DOCKERHUB_REPOSITORY }}/mucoll-ilc-framework:pr-2-centos8 /bin/bash -c "
+            source /opt/ilcsoft/muonc/init_ilcsoft.sh &&
+            ddsim --steeringFile test/sim_steer_muonGun_MuColl_v1.py
+          "
 #
 # Test ACTS
   proc:
@@ -124,18 +106,6 @@ jobs:
           - /opt/ilcsoft/muonc/ACTSTracking/main/share/ACTSTracking/example/actsseedckf_steer.xml
     steps:
       -
-        id: cache-image
-        name: Cache Built Image
-        uses: actions/cache@v2
-        with:
-          path: /tmp/myimage.tar
-          key: ${{ github.sha }}
-      -
-        name: Load image
-        run: |
-          docker load --input /tmp/myimage.tar
-          docker image ls -a
-      -
         name: Checkout
         uses: actions/checkout@v2
         with:
@@ -149,5 +119,7 @@ jobs:
       -
         name: Run ACTSTracking example
         run: |
-          source /opt/ilcsoft/muonc/init_ilcsoft.sh
-          Marlin ${{ matrix.steer }} --global.LCIOInputFiles=muonGun_sim_MuColl_v1.slcio
+          docker run -v ${PWD}:/var/myrun -w /var/myrun ${{ secrets.DOCKERHUB_REPOSITORY }}/mucoll-ilc-framework:pr-2-centos8 /bin/bash -c "
+            source /opt/ilcsoft/muonc/init_ilcsoft.sh &&
+            Marlin ${{ matrix.steer }} --global.LCIOInputFiles=muonGun_sim_MuColl_v1.slcio
+          "
