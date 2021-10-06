@@ -84,7 +84,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: ./muonGun_sim_MuColl_v1.slcio
-          key: events-${{ hashFiles('test/sim_steer_muonGun_MuColl_v1.py') }}
+          key: events-${{ hashFiles('test/sim_steer_muonGun_MuColl_v1.py') }}-0
       - name: Simulate Events
         if: steps.cache-sim.outputs.cache-hit != 'true'
         run: |
@@ -115,7 +115,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: ./muonGun_sim_MuColl_v1.slcio
-          key: events-${{ hashFiles('test/sim_steer_muonGun_MuColl_v1.py') }}
+          key: events-${{ hashFiles('test/sim_steer_muonGun_MuColl_v1.py') }}-0
       -
         name: Run ACTSTracking example
         run: |
