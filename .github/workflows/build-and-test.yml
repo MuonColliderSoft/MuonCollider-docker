@@ -70,7 +70,7 @@ jobs:
 #
 # Generate test events
   sim:
-#    needs: build
+    needs: build
     runs-on: ubuntu-latest
     steps:
       -
@@ -84,11 +84,11 @@ jobs:
         uses: actions/cache@v2
         with:
           path: ./muonGun_sim_MuColl_v1.slcio
-          key: events-${{ hashFiles('test/sim_steer_muonGun_MuColl_v1.py') }}-0
+          key: events-${{ hashFiles('test/sim_steer_muonGun_MuColl_v1.py') }}
       - name: Simulate Events
         if: steps.cache-sim.outputs.cache-hit != 'true'
         run: |
-          docker run -v ${PWD}:/var/myrun -w /var/myrun ${{ secrets.DOCKERHUB_REPOSITORY }}/mucoll-ilc-framework:pr-2-centos8 /bin/bash -c "
+          docker run -v ${PWD}:/var/myrun -w /var/myrun ${{ secrets.DOCKERHUB_REPOSITORY }}/mucoll-ilc-framework:${{github.sha}}-centos8 /bin/bash -c "
             source /opt/ilcsoft/muonc/init_ilcsoft.sh &&
             ddsim --steeringFile test/sim_steer_muonGun_MuColl_v1.py
           "
@@ -115,11 +115,11 @@ jobs:
         uses: actions/cache@v2
         with:
           path: ./muonGun_sim_MuColl_v1.slcio
-          key: events-${{ hashFiles('test/sim_steer_muonGun_MuColl_v1.py') }}-0
+          key: events-${{ hashFiles('test/sim_steer_muonGun_MuColl_v1.py') }}
       -
         name: Run ACTSTracking example
         run: |
-          docker run -v ${PWD}:/var/myrun -w /var/myrun ${{ secrets.DOCKERHUB_REPOSITORY }}/mucoll-ilc-framework:pr-2-centos8 /bin/bash -c "
+          docker run -v ${PWD}:/var/myrun -w /var/myrun ${{ secrets.DOCKERHUB_REPOSITORY }}/mucoll-ilc-framework:${{github.sha}}-centos8 /bin/bash -c "
             source /opt/ilcsoft/muonc/init_ilcsoft.sh &&
             Marlin ${{ matrix.steer }} --global.LCIOInputFiles=muonGun_sim_MuColl_v1.slcio
           "
