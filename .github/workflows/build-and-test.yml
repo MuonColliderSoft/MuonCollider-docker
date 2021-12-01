@@ -100,10 +100,10 @@ jobs:
     strategy:
       matrix:
         steer:
-          - /opt/ilcsoft/muonc/ACTSTracking/v1.0.0/share/ACTSTracking/example/actstruth_steer.xml
-          - /opt/ilcsoft/muonc/ACTSTracking/v1.0.0/share/ACTSTracking/example/actstruthckf_steer.xml
-          - /opt/ilcsoft/muonc/ACTSTracking/v1.0.0/share/ACTSTracking/example/actsseed_steer.xml
-          - /opt/ilcsoft/muonc/ACTSTracking/v1.0.0/share/ACTSTracking/example/actsseedckf_steer.xml
+          - /opt/ilcsoft/muonc/ACTSTracking/*/share/ACTSTracking/example/actstruth_steer.xml
+          - /opt/ilcsoft/muonc/ACTSTracking/*/share/ACTSTracking/example/actstruthckf_steer.xml
+          - /opt/ilcsoft/muonc/ACTSTracking/*/share/ACTSTracking/example/actsseed_steer.xml
+          - /opt/ilcsoft/muonc/ACTSTracking/*/share/ACTSTracking/example/actsseedckf_steer.xml
     steps:
       -
         name: Checkout
