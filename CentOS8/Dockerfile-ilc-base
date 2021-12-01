@@ -8,7 +8,7 @@ FROM ${REPOSITORY}/mucoll-environment:${VERSION}-centos8
 
 RUN cd /opt && git clone https://github.com/kkrizka/MuonCutil.git && \
     git clone https://github.com/MuonColliderSoft/iLCInstall.git && \
-    cd /opt/MuonCutil && git checkout release/acts && \
+    cd /opt/MuonCutil && git checkout officialacts && \
     cd /opt/iLCInstall && git checkout aee417fceb83b6f1892bdd492dca8e358a520c5c && \
     sed -i 's|/usr/bin/env python|/usr/bin/env python2|g' ilcsoft-install && \
     mkdir releases/development && \
