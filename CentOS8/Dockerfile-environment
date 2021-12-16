@@ -30,12 +30,12 @@ RUN yum -y install vim-enhanced xorg-x11-xauth screen git subversion rsync make 
                    root-geom root-graf3d-eve7 root-gui-browserv7 root-tpython \
                    root-unuran root-minuit2 root-smatrix gsl-devel geant4-devel clhep-devel HepMC3-devel
 
-# ## Apache Arrow (https://arrow.apache.org/install/)
-# RUN yum install -y https://apache.bintray.com/arrow/centos/$(cut -d: -f5 /etc/system-release-cpe | cut -d. -f1)/apache-arrow-release-latest.rpm && \
-#     yum install -y arrow-devel arrow-glib-devel \
-#     	     	   arrow-dataset-devel \
-# 		   parquet-devel parquet-glib-devel
-#
+## Apache Arrow (https://arrow.apache.org/install/)
+RUN yum install -y https://apache.jfrog.io/artifactory/arrow/centos/$(cut -d: -f5 /etc/system-release-cpe | cut -d. -f1)/apache-arrow-release-latest.rpm && \
+    yum install -y arrow-devel arrow-glib-devel \
+    	     	   arrow-dataset-devel \
+		   parquet-devel parquet-glib-devel
+
 ## all datasets in the container !!!!
 RUN geant4-dataset-download
 
