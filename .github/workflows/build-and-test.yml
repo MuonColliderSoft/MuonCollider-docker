@@ -35,6 +35,12 @@ jobs:
         with:
           images: ${{ secrets.DOCKERHUB_REPOSITORY }}/mucoll-dummy
       -
+        name: Run checks
+        run: |
+          pwd
+          ls
+          docker --version
+      -
         name: Build and Push (mucoll-environment)
         id: docker_build_mucoll-environment
         uses: docker/build-push-action@v2
