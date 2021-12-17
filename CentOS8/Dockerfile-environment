@@ -44,7 +44,7 @@ RUN alternatives --set python /usr/bin/python3 && \
     sed -i 's|include_next|include|g' /usr/include/c++/8/bits/std_abs.h && \
     sed -i 's|include_next|include|g' /usr/include/c++/8/cmath
 
-COPY c++config.h /usr/include/c++/8/x86_64-redhat-linux/bits/c++config.h
+#COPY c++config.h /usr/include/c++/8/x86_64-redhat-linux/bits/c++config.h
 #COPY c++config_32.h /usr/include/c++/8/x86_64-redhat-linux/32/bits/c++config.h
 
 
