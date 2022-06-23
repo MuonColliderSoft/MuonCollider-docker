@@ -1,9 +1,9 @@
 ###############################################################################
 #  Repository: mucoll-ilc-base
-#  Tag:        1.6-centos8
+#  Tag:        1.6-centos8stream
 ###############################################################################
 
-FROM infnpd/mucoll-environment:1.6-centos8
+FROM infnpd/mucoll-environment:1.6-centos8stream
 
 RUN cd /opt && git clone https://github.com/MuonColliderSoft/MuonCutil.git && \
     git clone https://github.com/MuonColliderSoft/iLCInstall.git && \
