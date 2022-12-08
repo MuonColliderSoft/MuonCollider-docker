@@ -7,7 +7,7 @@ FROM infnpd/mucoll-environment:1.6-centos8stream
 
 RUN cd /opt && git clone https://github.com/MuonColliderSoft/MuonCutil.git && \
     git clone https://github.com/MuonColliderSoft/iLCInstall.git && \
-    cd /opt/MuonCutil && git checkout v02-07-MC && \
+    cd /opt/MuonCutil && git d54bc67960f252fd75d3f4ed7f745bdb1efeaca7 && \
     cd /opt/iLCInstall && git checkout v02-03-01-MC && \
     mkdir releases/development && \
     cp /opt/MuonCutil/releases/development/* releases/development && \
