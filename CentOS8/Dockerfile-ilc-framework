@@ -15,5 +15,3 @@ RUN cd /opt/ilcsoft/muonc && \
 RUN sed -i -e 's|/bin/env python|/usr/bin/env python2|g' /opt/ilcsoft/muonc/CEDViewer/*/bin/ced2go
 
 COPY profile.d_ilcsoft.sh /etc/profile.d/ilcsoft.sh
-
-
