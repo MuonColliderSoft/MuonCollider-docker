@@ -1,24 +1,30 @@
 ###############################################################################
-#  Image: mucoll-environment
+#  Repository: mucoll-environment
+#  Tag:        1.6-centos8stream
 ###############################################################################
 
-FROM centos:centos8
+FROM cern/c8-base:latest
 
 RUN yum -y install epel-release yum-utils wget && \
     yum-config-manager --set-enabled powertools && \
-    yum-config-manager --set-enabled appstream
+    yum-config-manager --set-enabled appstream && \
+    yum -y update
 
 RUN wget -O /etc/yum.repos.d/EGI-trustanchors.repo http://repository.egi.eu/sw/production/cas/1/current/repo-files/EGI-trustanchors.repo && \
     yum -y install ca-policy-egi-core && \
     ln -s /etc/grid-security/certificates/USERTrustRSACertificationAuthority.pem /etc/pki/ca-trust/source/anchors/ && \
     ln -s /etc/grid-security/certificates/GEANTeScienceSSLCA4.pem /etc/pki/ca-trust/source/anchors/ && \
+    wget -O /etc/pki/ca-trust/source/anchors/GEANT-OV-RSA-CA-4.pem https://pandora.infn.it/public/483fb5/dl/GEANT-OV-RSA-CA-4.pem && \
     update-ca-trust extract && \
-    wget -O /etc/yum.repos.d/mc-extras.repo https://cld-smact-02.pd.infn.it/artifacts/repository/repo-files/mc-extras.repo && \
-    wget -O /etc/yum.repos.d/root.repo https://cld-smact-02.pd.infn.it/artifacts/repository/repo-files/root-c17.repo && \
+    wget -O /etc/yum.repos.d/mc-extras.repo https://nexus.pd.infn.it/artifacts/repository/repo-files/mc-extras.repo && \
+    wget -O /etc/yum.repos.d/root.repo https://nexus.pd.infn.it/artifacts/repository/repo-files/root-c17.repo && \
     wget -O /etc/yum.repos.d/acts.repo https://portal.nersc.gov/cfs/atlas/kkrizka/repos/acts/acts.repo
 
+# temporary work-around
+RUN yum -y localinstall http://mirror.centos.org/centos/8-stream/PowerTools/x86_64/os/Packages/xxhash-libs-0.8.1-3.el8.x86_64.rpm
+
 RUN yum -y install vim-enhanced xorg-x11-xauth screen git subversion rsync make gdb valgrind graphviz \
-                   sshpass zip doxygen rpm-build gcc gcc-c++ patch python2 \
+                   zip doxygen rpm-build gcc gcc-c++ patch python2 \
                    libSM-devel libX11-devel libXext-devel libXft-devel libXmu-devel libXpm-devel \
                    libjpeg-turbo-devel libpng-devel libtiff-devel mesa-libGLU-devel \
                    zlib-devel freeglut-devel bzip2 glibc-devel glibc-utils glibc \
