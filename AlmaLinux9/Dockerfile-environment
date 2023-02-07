@@ -1,0 +1,36 @@
+###############################################################################
+#  Repository: mucoll-environment
+#  Tag:        1.7-almalinux9
+###############################################################################
+
+FROM almalinux:9.1-20221201
+
+RUN yum -y install epel-release yum-utils wget && \
+    yum-config-manager --set-enabled appstream && \
+    yum-config-manager --set-enabled crb && \
+    yum-config-manager --set-enabled extras && \
+    yum-config-manager --set-enabled plus && \
+    yum -y update
+
+RUN wget -O /etc/yum.repos.d/geant4.repo https://nexus.pd.infn.it/artifacts/repository/repo-files/geant4.repo
+
+RUN yum -y install vim-enhanced  mlocate emacs eog xorg-x11-xauth screen git subversion rsync make \
+                   gdb valgrind graphviz zip doxygen rpm-build gcc gcc-c++ patch \
+                   libSM-devel libX11-devel libXext-devel libXft-devel libXmu-devel libXpm-devel \
+                   libjpeg-turbo-devel libpng-devel libtiff-devel mesa-libGLU-devel \
+                   zlib-devel freeglut-devel bzip2 glibc-devel glibc-utils glibc \
+                   glibc-headers glibc-static glibc-common libstdc++-devel expat-devel giflib-devel openmotif-devel \
+                   mysql mysql-devel tbb-devel texlive texlive-xtab texlive-multirow texlive-sectsty texlive-tocloft \
+                   xrootd-devel python3-devel libquadmath-devel binutils-devel libstdc++-devel \
+                   eigen3-devel boost-devel mesa-dri-drivers \
+                   root root-gdml root-graf3d-eve root-genvector python3-root root-tmva \
+                   root-geom root-graf3d-eve7 root-gui-browserv7 root-tpython \
+                   root-unuran root-minuit2 root-smatrix gsl-devel geant4-devel clhep-devel HepMC3-devel
+
+## all datasets in the container !!!!
+RUN geant4-dataset-download && \
+    ln -sf /usr/bin/python3 /usr/bin/python
+
+COPY c++config.h /usr/include/c++/11/x86_64-redhat-linux/bits/c++config.h
+COPY c++config_32.h /usr/include/c++/11/x86_64-redhat-linux/32/bits/c++config.h
+
