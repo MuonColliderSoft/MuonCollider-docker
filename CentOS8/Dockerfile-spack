@@ -1,0 +1,16 @@
+###############################################################################
+#  Repository: mucoll-spack
+#  Tag:        2.0-centos8stream
+###############################################################################
+
+FROM mucoll-environment:2.0-centos8stream
+
+# Setting up Spack
+RUN git clone --depth 1 https://github.com/key4hep/spack && \
+    echo "source /opt/rh/gcc-toolset-11/enable" >> ~/setenv.sh && \
+    echo "source ~/spack/share/spack/setup-env.sh" >> ~/setenv.sh
+
+# Registering compilers with Spack
+RUN source ~/setenv.sh && \
+    spack compiler find && \
+    spack compilers
