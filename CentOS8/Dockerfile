@@ -9,7 +9,7 @@ FROM mucoll-spack:2.0-centos8stream
 RUN mkdir spack-repos && \
     git clone https://github.com/key4hep/key4hep-spack spack-repos/key4hep-spack
 
-# FIXME: Should replace by a `git clone` in the final version
+# FIXME: Using `ADD` for debugging. To be replaced by `RUN git clone ...` in production
 ADD mucoll-spack spack-repos/mucoll-spack
 
 # Configuring Key4hep environment
@@ -23,19 +23,34 @@ RUN source ~/setenv.sh && \
     echo "spack env st" >> ~/setenv.sh && \
     spack spec
 
-# Setting up MuColl stack
+# Concretizing the MuColl stack
 RUN source ~/setenv.sh && \
     spack repo add spack-repos/mucoll-spack && \
     spack add mucoll-stack && \
     spack concretize
+
+# Installing fragments of dependency tree in separate layers for cached debugging
+ENV SPACK_INSTALL_OPTS "--only-concrete --no-add --fail-fast"
 RUN source ~/setenv.sh && \
-    spack install --only-concrete --fail-fast root
+    spack install ${SPACK_INSTALL_OPTS} binutils && \
 RUN source ~/setenv.sh && \
-    spack install --only-concrete --fail-fast lcio
+    spack install ${SPACK_INSTALL_OPTS} llvm && \
+    spack clean -a
 RUN source ~/setenv.sh && \
-    spack install --only-concrete --fail-fast edm4hep
+    spack install ${SPACK_INSTALL_OPTS} root && \
+    spack clean -a
 RUN source ~/setenv.sh && \
-    spack install --only-concrete --fail-fast dd4hep
+    spack install ${SPACK_INSTALL_OPTS} lcio && \
+    spack clean -a
+RUN source ~/setenv.sh && \
+    spack install ${SPACK_INSTALL_OPTS} edm4hep && \
+    spack clean -a
+RUN source ~/setenv.sh && \
+    spack install ${SPACK_INSTALL_OPTS} dd4hep && \
+    spack clean -a
+RUN source ~/setenv.sh && \
+    spack install ${SPACK_INSTALL_OPTS} && \
+    spack clean -a
 
 ENTRYPOINT ["/bin/bash", "--login"]
 
