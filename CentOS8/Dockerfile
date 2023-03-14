@@ -33,6 +33,7 @@ RUN source ~/setenv.sh && \
 ENV SPACK_INSTALL_OPTS "--only-concrete --no-add --fail-fast"
 RUN source ~/setenv.sh && \
     spack install ${SPACK_INSTALL_OPTS} binutils && \
+    spack clean -a
 RUN source ~/setenv.sh && \
     spack install ${SPACK_INSTALL_OPTS} llvm && \
     spack clean -a
