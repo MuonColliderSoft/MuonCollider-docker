@@ -13,43 +13,44 @@ RUN mkdir spack-repos && \
 ADD mucoll-spack spack-repos/mucoll-spack
 
 # Configuring Key4hep environment
-ENV SPACK_COLOR="always"
 RUN source ~/setenv.sh && \
     spack repo add spack-repos/key4hep-spack && \
+    spack repo add spack-repos/mucoll-spack && \
     spack env create sim && \
     spack env activate sim && \
     cp spack-repos/mucoll-spack/environments/mucoll-common/packages.yaml $SPACK_ENV/ && \
     echo "spack env activate sim" >> ~/setenv.sh && \
-    echo "spack env st" >> ~/setenv.sh && \
-    spack spec
+    echo "spack env st" >> ~/setenv.sh
 
-# Concretizing the MuColl stack
+# Concretizing the MuColl stack reusing system packages as external
 RUN source ~/setenv.sh && \
-    spack repo add spack-repos/mucoll-spack && \
     spack add mucoll-stack && \
-    spack concretize
+    spack concretize --reuse
 
 # Installing fragments of dependency tree in separate layers for cached debugging
 ENV SPACK_INSTALL_OPTS "--only-concrete --no-add --fail-fast"
 RUN source ~/setenv.sh && \
-    spack install ${SPACK_INSTALL_OPTS} binutils && \
-    spack clean -a
-RUN source ~/setenv.sh && \
+    spack spec -NIt llvm && \
     spack install ${SPACK_INSTALL_OPTS} llvm && \
     spack clean -a
 RUN source ~/setenv.sh && \
+    spack spec -NIt root && \
     spack install ${SPACK_INSTALL_OPTS} root && \
     spack clean -a
 RUN source ~/setenv.sh && \
+    spack spec -NIt lcio && \
     spack install ${SPACK_INSTALL_OPTS} lcio && \
     spack clean -a
 RUN source ~/setenv.sh && \
+    spack spec -NIt edm4hep && \
     spack install ${SPACK_INSTALL_OPTS} edm4hep && \
     spack clean -a
 RUN source ~/setenv.sh && \
+    spack spec -NIt dd4hep && \
     spack install ${SPACK_INSTALL_OPTS} dd4hep && \
     spack clean -a
 RUN source ~/setenv.sh && \
+    spack spec -NIt && \
     spack install ${SPACK_INSTALL_OPTS} && \
     spack clean -a
 

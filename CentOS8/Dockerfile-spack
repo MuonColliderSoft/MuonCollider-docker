@@ -11,6 +11,13 @@ RUN git clone --depth 1 https://github.com/key4hep/spack && \
     echo "source ~/spack/share/spack/setup-env.sh" >> ~/setenv.sh
 
 # Registering compilers with Spack
+ENV SPACK_COLOR="always"
 RUN source ~/setenv.sh && \
     spack compiler find && \
-    spack compilers
+    spack compilers && \
+    spack spec cmake
+
+# Including system packages as external
+RUN source ~/setenv.sh && \
+    spack external find --all --scope user binutils cmake curl \
+    diffutils findutils gettext libtool openssh openssl pkgconf python tar texinfo xz zip
