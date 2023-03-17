@@ -3,10 +3,10 @@
 #  Tag:        2.0-centos8stream
 ###############################################################################
 
-FROM mucoll-environment:2.0-centos8stream
+FROM mucoll-environment:2.1-centos8stream
 
 # Setting up Spack
-RUN git clone --depth 1 https://github.com/key4hep/spack && \
+RUN git clone -c feature.manyFiles=true --branch v0.18.1 https://github.com/spack/spack.git && \
     echo "source /opt/rh/gcc-toolset-11/enable" >> ~/setenv.sh && \
     echo "source ~/spack/share/spack/setup-env.sh" >> ~/setenv.sh
 
@@ -17,7 +17,3 @@ RUN source ~/setenv.sh && \
     spack compilers && \
     spack spec cmake
 
-# Including system packages as external
-RUN source ~/setenv.sh && \
-    spack external find --all --scope user binutils cmake curl \
-    diffutils findutils gettext libtool openssh openssl pkgconf python tar texinfo xz zip
