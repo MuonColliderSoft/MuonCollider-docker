@@ -1,0 +1,26 @@
+###############################################################################
+#  Repository: mucoll-spack
+#  Tag:        2.0-el9
+###############################################################################
+
+FROM mucoll-environment:2.0-el9
+
+# Setting up Spack
+RUN git clone --depth=1 --branch v0.19.1 https://github.com/spack/spack.git && \
+    echo "source /opt/rh/gcc-toolset-12/enable" >> ~/setenv.sh && \
+    echo "source ~/spack/share/spack/setup-env.sh" >> ~/setenv.sh
+
+# Registering compilers with Spack
+ENV SPACK_COLOR="always"
+RUN source ~/setenv.sh && \
+    spack compiler find && \
+    spack compilers && \
+    spack spec cmake
+
+# Enabling use of LD_LIBRARY - required for proper run-environment setup
+RUN source ~/setenv.sh && \
+    spack config add modules:prefix_inspections:lib64:[LD_LIBRARY_PATH] && \
+    spack config add modules:prefix_inspections:lib:[LD_LIBRARY_PATH]
+# Adding system build packages as external (to speed up installation)
+RUN source ~/setenv.sh && \
+    spack external find
