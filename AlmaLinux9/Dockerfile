@@ -33,24 +33,16 @@ RUN source ~/setenv.sh && \
 ENV SPACK_INSTALL_OPTS "--only-concrete --no-add --fail-fast"
 RUN source ~/setenv.sh && \
     spack spec -NIt lcio && \
-    spack install ${SPACK_INSTALL_OPTS} lcio && \
+    spack install ${SPACK_INSTALL_OPTS} root && \
     spack clean -a
-# RUN source ~/setenv.sh && \
-#     spack spec -NIt root && \
-#     spack install ${SPACK_INSTALL_OPTS} root && \
-#     spack clean -a
-# RUN source ~/setenv.sh && \
-#     spack spec -NIt edm4hep && \
-#     spack install ${SPACK_INSTALL_OPTS} edm4hep && \
-#     spack clean -a
-# RUN source ~/setenv.sh && \
-#     spack spec -NIt dd4hep && \
-#     spack install ${SPACK_INSTALL_OPTS} dd4hep && \
-#     spack clean -a
-# RUN source ~/setenv.sh && \
-#     spack spec -NIt && \
-#     spack install ${SPACK_INSTALL_OPTS} && \
-#     spack clean -a
+RUN source ~/setenv.sh && \
+    spack spec -NIt dd4hep && \
+    spack install ${SPACK_INSTALL_OPTS} dd4hep && \
+    spack clean -a
+RUN source ~/setenv.sh && \
+    spack spec -NIt && \
+    spack install ${SPACK_INSTALL_OPTS} && \
+    spack clean -a
 
 ENTRYPOINT ["/bin/bash", "--login"]
 

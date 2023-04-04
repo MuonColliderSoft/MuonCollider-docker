@@ -29,16 +29,8 @@ RUN source ~/setenv.sh && \
 # Installing fragments of dependency tree in separate layers for cached debugging
 ENV SPACK_INSTALL_OPTS "--only-concrete --no-add --fail-fast"
 RUN source ~/setenv.sh && \
-    spack spec -NIt lcio && \
-    spack install ${SPACK_INSTALL_OPTS} lcio && \
-    spack clean -a
-RUN source ~/setenv.sh && \
     spack spec -NIt root && \
     spack install ${SPACK_INSTALL_OPTS} root && \
-    spack clean -a
-RUN source ~/setenv.sh && \
-    spack spec -NIt edm4hep && \
-    spack install ${SPACK_INSTALL_OPTS} edm4hep && \
     spack clean -a
 RUN source ~/setenv.sh && \
     spack spec -NIt dd4hep && \
