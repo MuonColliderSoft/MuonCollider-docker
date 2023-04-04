@@ -1,6 +1,6 @@
 ###############################################################################
 #  Repository: mucoll-environment
-#  Tag:        2.0-centos8stream
+#  Tag:        2.0-cs8stream
 ###############################################################################
 
 FROM cern/c8-base:latest
@@ -11,14 +11,11 @@ RUN yum update -y && \
     yum update -y
 
 RUN yum --enablerepo epel groupinstall -y "Development Tools" && \
-    yum --enablerepo epel install -y curl findutils gcc-c++ gcc gcc-gfortran git gnupg2 hostname iproute redhat-lsb-core make patch python3 python3-pip python3-setuptools unzip
+    yum --enablerepo epel install -y vim curl findutils gcc-c++ gcc gcc-gfortran git gnupg2 hostname iproute redhat-lsb-core make patch python3 python3-pip python3-setuptools unzip
 RUN python3 -m pip install boto3
 
 # Installing newer GCC compiler
 RUN yum --enablerepo epel install -y gcc-toolset-11
-
-# Installing additional components for use by Spack as external packages
-RUN yum --enablerepo epel install -y vim cmake
 
 # Setting up users to be used for the local environment setup
 RUN echo "root" | passwd --stdin root
