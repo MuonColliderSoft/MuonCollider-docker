@@ -28,4 +28,3 @@ RUN useradd --shell /bin/bash --create-home sim && \
     echo "sim" | passwd --stdin sim
 USER sim
 WORKDIR /home/sim
-

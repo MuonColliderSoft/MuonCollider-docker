@@ -17,7 +17,7 @@ RUN git clone https://github.com/key4hep/key4hep-spack spack-repos/key4hep-spack
 
 # Configuring Key4hep environment
 ENV SPACK_ENV_DIR "spack-repos/mucoll-spack/environments/mucoll-release/"
-RUN source ~/setenv.sh && \
+RUN source /setenv.sh && \
     spack repo add spack-repos/key4hep-spack && \
     spack repo add spack-repos/mucoll-spack && \
     spack env create sim && \
@@ -27,21 +27,21 @@ RUN source ~/setenv.sh && \
     echo "spack env st" >> ~/setenv.sh
 
 # Concretizing the MuColl stack reusing system packages as external
-RUN source ~/setenv.sh && \
+RUN source /setenv.sh && \
     spack add mucoll-stack && \
     spack concretize --reuse
 
 # Installing fragments of dependency tree in separate layers for cached debugging
 ENV SPACK_INSTALL_OPTS "--only-concrete --no-add --fail-fast"
-RUN source ~/setenv.sh && \
+RUN source /setenv.sh && \
     spack spec -NIt lcio && \
     spack install ${SPACK_INSTALL_OPTS} root && \
     spack clean -a
-RUN source ~/setenv.sh && \
+RUN source /setenv.sh && \
     spack spec -NIt dd4hep && \
     spack install ${SPACK_INSTALL_OPTS} dd4hep && \
     spack clean -a
-RUN source ~/setenv.sh && \
+RUN source /setenv.sh && \
     spack spec -NIt && \
     spack install ${SPACK_INSTALL_OPTS} && \
     spack clean -a
