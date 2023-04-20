@@ -41,30 +41,30 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           push: true
-          context: ./CentOS8
-          file: ./CentOS8/Dockerfile-environment
-          tags: ${{ secrets.DOCKERHUB_REPOSITORY }}/mucoll-environment:${{steps.meta.outputs.version}}-centos8
+          context: ./AlmaLinux9
+          file: ./AlmaLinux9/Dockerfile-environment
+          tags: ${{ secrets.DOCKERHUB_REPOSITORY }}/mucoll-environment:${{steps.meta.outputs.version}}-alma9
       -
-        name: Build and Push (mucoll-ilc-base)
-        id: docker_build_mucoll-ilc-base
+        name: Build and Push (mucoll-spack)
+        id: docker_build_mucoll-spack
         uses: docker/build-push-action@v2
         with:
           push: true
-          context: ./CentOS8
-          file: ./CentOS8/Dockerfile-ilc-base
+          context: ./AlmaLinux9
+          file: ./AlmaLinux9/Dockerfile-spack
           build-args: |
             VERSION=${{ steps.meta.outputs.version }}
             REPOSITORY=${{ secrets.DOCKERHUB_REPOSITORY }}
-          tags: ${{ secrets.DOCKERHUB_REPOSITORY }}/mucoll-ilc-base:${{steps.meta.outputs.version}}-centos8
+          tags: ${{ secrets.DOCKERHUB_REPOSITORY }}/mucoll-spack:${{steps.meta.outputs.version}}-alma9
       -
-        name: Build and Push (mucoll-ilc-framework)
-        id: docker_build_mucoll-ilc-framework
+        name: Build and Push (mucoll-sim)
+        id: docker_build_mucoll-sim
         uses: docker/build-push-action@v2
         with:
           push: true
-          context: ./CentOS8
-          file: ./CentOS8/Dockerfile-ilc-framework
+          context: ./AlmaLinux9
+          file: ./AlmaLinux9/Dockerfile-sim
           build-args: |
             VERSION=${{ steps.meta.outputs.version }}
             REPOSITORY=${{ secrets.DOCKERHUB_REPOSITORY }}
-          tags: ${{ secrets.DOCKERHUB_REPOSITORY }}/mucoll-ilc-framework:${{steps.meta.outputs.version}}-centos8
+          tags: ${{ secrets.DOCKERHUB_REPOSITORY }}/mucoll-sim:${{steps.meta.outputs.version}}-alma9
