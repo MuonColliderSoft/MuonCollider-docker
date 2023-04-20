@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        os: [{dir:CentOS8,suffix:cs8stream}, {dir:Alma9,suffix:el9}]
+        os: [{dir: CentOS8,suffix: cs8stream}, {dir: Alma9,suffix: el9}]
     steps:
       - 
         name: Checkout
