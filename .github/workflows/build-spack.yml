@@ -14,6 +14,9 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        os: [{dir:CentOS8,suffix:cs8stream}, {dir:Alma9,suffix:el9}]
     steps:
       - 
         name: Checkout
@@ -41,30 +44,18 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           push: true
-          context: ./AlmaLinux9
-          file: ./AlmaLinux9/Dockerfile-environment
-          tags: ${{ secrets.DOCKERHUB_REPOSITORY }}/mucoll-environment:${{steps.meta.outputs.version}}-alma9
+          context: ./${{matrix.os.dir}}
+          file: ./${{matrix.os.dir}}/Dockerfile-environment
+          tags: ${{ secrets.DOCKERHUB_REPOSITORY }}/mucoll-environment:${{steps.meta.outputs.version}}-${{matrix.os.suffix}}
       -
         name: Build and Push (mucoll-spack)
         id: docker_build_mucoll-spack
         uses: docker/build-push-action@v2
         with:
           push: true
-          context: ./AlmaLinux9
-          file: ./AlmaLinux9/Dockerfile-spack
+          context: ./${{matrix.os.dir}}
+          file: ./${{matrix.os.dir}}/Dockerfile-spack
           build-args: |
             VERSION=${{ steps.meta.outputs.version }}
             REPOSITORY=${{ secrets.DOCKERHUB_REPOSITORY }}
-          tags: ${{ secrets.DOCKERHUB_REPOSITORY }}/mucoll-spack:${{steps.meta.outputs.version}}-alma9
-      -
-        name: Build and Push (mucoll-sim)
-        id: docker_build_mucoll-sim
-        uses: docker/build-push-action@v2
-        with:
-          push: true
-          context: ./AlmaLinux9
-          file: ./AlmaLinux9/Dockerfile-sim
-          build-args: |
-            VERSION=${{ steps.meta.outputs.version }}
-            REPOSITORY=${{ secrets.DOCKERHUB_REPOSITORY }}
-          tags: ${{ secrets.DOCKERHUB_REPOSITORY }}/mucoll-sim:${{steps.meta.outputs.version}}-alma9
+          tags: ${{ secrets.DOCKERHUB_REPOSITORY }}/mucoll-spack:${{steps.meta.outputs.version}}-${{matrix.os.suffix}}
