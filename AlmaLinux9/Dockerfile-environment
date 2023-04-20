@@ -1,8 +1,10 @@
 ###############################################################################
-#  Repository: mucoll-environment
-#  Tag:        2.0-el9
+#  Repository: ${REPOSITORY}/mucoll-environment
+#  Tag:        ${VERSION}-el9
 ###############################################################################
 
+ARG VERSION=devel
+ARG REPOSITORY=infnpd
 FROM cern/alma9-base:latest
 
 # Installing updates required for Spack

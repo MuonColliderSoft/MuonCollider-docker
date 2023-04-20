@@ -1,9 +1,11 @@
 ###############################################################################
 #  Repository: mucoll-spack
-#  Tag:        2.0-cs8stream
+#  Tag:        ${VERSION}-cs8stream
 ###############################################################################
 
-FROM mucoll-environment:2.0-cs8stream
+ARG VERSION=devel
+ARG REPOSITORY=infnpd
+FROM ${REPOSITORY}/mucoll-environment:${VERSION}-cs8stream
 
 # Setting up Spack
 RUN git clone --depth=1 --branch v0.19.1 https://github.com/spack/spack.git && \

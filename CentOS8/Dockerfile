@@ -1,9 +1,11 @@
 ###############################################################################
-#  Repository: mucoll-sim
-#  Tag:        2.0-cs8stream
+#  Repository: ${REPOSITORY}/mucoll-sim
+#  Tag:        ${VERSION}-cs8stream
 ###############################################################################
 
-FROM mucoll-spack:2.0-cs8stream
+ARG VERSION=devel
+ARG REPOSITORY=infnpd
+FROM ${REPOSITORY}/mucoll-spack:${VERSION}-cs8stream
 
 # Adding repositories: Key4hep + MuColl
 RUN mkdir spack-repos

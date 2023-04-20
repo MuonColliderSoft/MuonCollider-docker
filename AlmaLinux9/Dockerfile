@@ -1,9 +1,11 @@
 ###############################################################################
-#  Repository: mucoll-sim
-#  Tag:        2.0-el9
+#  Repository: ${REPOSITORY}/mucoll-sim
+#  Tag:        ${VERSION}-el9
 ###############################################################################
 
-FROM mucoll-spack:2.0-el9
+ARG VERSION=devel
+ARG REPOSITORY=infnpd
+FROM ${REPOSITORY}/mucoll-spack:${VERSION}-el9
 
 # Adding Key4hep repositories
 RUN mkdir spack-repos

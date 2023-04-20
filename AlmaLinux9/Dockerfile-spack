@@ -1,9 +1,11 @@
 ###############################################################################
 #  Repository: mucoll-spack
-#  Tag:        2.0-el9
+#  Tag:        ${VERSION}-el9
 ###############################################################################
 
-FROM mucoll-environment:2.0-el9
+ARG VERSION=devel
+ARG REPOSITORY=infnpd
+FROM ${REPOSITORY}/mucoll-environment:${VERSION}-el9
 
 # Setting up Spack
 RUN git clone --depth=1 --branch v0.19.1 https://github.com/spack/spack.git && \
