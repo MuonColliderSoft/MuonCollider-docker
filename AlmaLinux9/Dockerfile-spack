@@ -8,11 +8,6 @@ ARG REPOSITORY=infnpd
 FROM ${REPOSITORY}/mucoll-environment:${VERSION}-el9
 
 # Setting up Spack
-RUN whoami
-RUN ls /
-RUN ls /opt
-RUN ls
-
 RUN git clone --depth=1 --branch v0.19.1 https://github.com/spack/spack.git /opt/spack && \
     echo "source /opt/rh/gcc-toolset-12/enable" >> /setenv.sh && \
     echo "source /opt/spack/share/spack/setup-env.sh" >> /setenv.sh
