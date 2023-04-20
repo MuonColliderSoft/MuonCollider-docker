@@ -10,7 +10,10 @@ FROM ${REPOSITORY}/mucoll-spack:${VERSION}-el9
 # Adding Key4hep repositories
 RUN mkdir spack-repos
 RUN git clone https://github.com/key4hep/key4hep-spack spack-repos/key4hep-spack && \
+    pushd spack-repos/key4hep-spack && git checkout ec3ae6f && popd && \
     git clone https://github.com/MuonColliderSoft/mucoll-spack spack-repos/mucoll-spack
+# FIXME: The key4hep-spack ec3ae6f ref is the last one known to work. Update to
+# a stable tag once availlable.
 # FIXME: Using `ADD` for debugging. Should use `RUN git clone ...` in production
 # ADD key4hep-spack spack-repos/key4hep-spack
 # ADD mucoll-spack spack-repos/mucoll-spack
