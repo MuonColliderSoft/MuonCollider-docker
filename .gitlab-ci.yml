@@ -9,10 +9,10 @@ stages:
     entrypoint: [""]
   variables:
     DOCKERFILE: <Dockerfile path>
-    REPOSITORY: <argument to the Dockerfile>
-    VERSION: <argument to the Dockerfile>
+    VERSION: devel
+    OSTAG: <Tag suffix corresponding to version>
     # Use single quotes to escape colon
-    DESTINATION: '${CI_REGISTRY_IMAGE}:${VERSION}'
+    DESTINATION: '${CI_REGISTRY_IMAGE}/${IMAGE}:${VERSION}-${OSTAG}'
   before_script:
     # Prepare Kaniko configuration file
     - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" > /kaniko/.docker/config.json
@@ -34,21 +34,21 @@ build-environment:
   extends: .build_template
   variables:
     DOCKERFILE: AlmaLinux9/Dockerfile-environment
-    REPOSITORY: infnpd
-    VERSION: devel
+    IMAGE: mucoll-environment
+    OSTAG: el9
 
 build-spack:
   extends: .build_template
   variables:
     DOCKERFILE: AlmaLinux9/Dockerfile-spack
-    REPOSITORY: kkrizka
-    VERSION: devel
+    IMAGE: mucoll-spack
+    OSTAG: el9
   needs: [build-environment]
 
 build-sim:
   extends: .build_template
   variables:
     DOCKERFILE: AlmaLinux9/Dockerfile
-    REPOSITORY: kkrizka
-    VERSION: devel
+    IMAGE: mucoll-sim
+    OSTAG: el9
   needs: [build-spack]
