@@ -24,10 +24,10 @@ stages:
       --dockerfile ${DOCKERFILE}
       --build-arg ${BUILD_ARG_1}
       --destination ${DESTINATION}
-  only:
-    # Only build if the generating files change
-    changes:
-      - ${DOCKERFILE}
+  # only:
+  #   # Only build if the generating files change
+  #   changes:
+  #     - ${DOCKERFILE}
 
 build-environment:
   extends: .build_template
