@@ -1,0 +1,56 @@
+stages:
+  - build
+
+.build_template:
+  stage: build
+  image:
+    # Use CERN version of the Kaniko image
+    name: gitlab-registry.cern.ch/ci-tools/docker-image-builder
+    entrypoint: [""]
+  variables:
+    DOCKERFILE: <Dockerfile path>
+    BUILD_ARG_1: <argument to the Dockerfile>
+    TAG: latest
+    # Use single quotes to escape colon
+    DESTINATION: '${CI_REGISTRY_IMAGE}:${TAG}'
+  before_script:
+    # Prepare Kaniko configuration file
+    - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" > /kaniko/.docker/config.json
+  script:
+    - printenv
+    # Build and push the image from the given Dockerfile
+    # See https://docs.gitlab.com/ee/ci/variables/predefined_variables.html#variables-reference for available variables
+    - /kaniko/executor --context $CI_PROJECT_DIR
+      --dockerfile ${DOCKERFILE}
+      --build-arg ${BUILD_ARG_1}
+      --destination ${DESTINATION}
+  only:
+    # Only build if the generating files change
+    changes:
+      - ${DOCKERFILE}
+      - entrypoint.sh
+    except:
+      - tags
+
+build-environment:
+  extends: .build_template
+  variables:
+    DOCKERFILE: AlmaLinux9/Dockerfile-environment
+    REPOSITORY: infnpd
+    VERSION: devel
+
+build-spack:
+  extends: .build_template
+  variables:
+    DOCKERFILE: AlmaLinux9/Dockerfile-spack
+    REPOSITORY: kkrizka
+    VERSION: devel
+  needs: [build-environment]
+
+build-sim:
+  extends: .build_template
+  variables:
+    DOCKERFILE: AlmaLinux9/Dockerfile
+    REPOSITORY: kkrizka
+    VERSION: devel
+  needs: [build-spack]
