@@ -25,6 +25,11 @@ stages:
       --build-arg REPOSITORY=${CI_REGISTRY_IMAGE}
       --build-arg VERSION=${VERSION}
       --destination ${DESTINATION}
+    - echo /kaniko/executor --context $CI_PROJECT_DIR
+      --dockerfile ${DOCKERFILE}
+      --build-arg REPOSITORY=${CI_REGISTRY_IMAGE}
+      --build-arg VERSION=${VERSION}
+      --destination ${DESTINATION}
   # only:
   #   # Only build if the generating files change
   #   changes:
