@@ -28,9 +28,6 @@ stages:
     # Only build if the generating files change
     changes:
       - ${DOCKERFILE}
-      - entrypoint.sh
-    except:
-      - tags
 
 build-environment:
   extends: .build_template
