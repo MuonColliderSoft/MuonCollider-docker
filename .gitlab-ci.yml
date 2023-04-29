@@ -9,10 +9,10 @@ stages:
     entrypoint: [""]
   variables:
     DOCKERFILE: <Dockerfile path>
-    BUILD_ARG_1: <argument to the Dockerfile>
-    TAG: latest
+    REPOSITORY: <argument to the Dockerfile>
+    VERSION: <argument to the Dockerfile>
     # Use single quotes to escape colon
-    DESTINATION: '${CI_REGISTRY_IMAGE}:${TAG}'
+    DESTINATION: '${CI_REGISTRY_IMAGE}:${VERSION}'
   before_script:
     # Prepare Kaniko configuration file
     - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" > /kaniko/.docker/config.json
@@ -22,7 +22,8 @@ stages:
     # See https://docs.gitlab.com/ee/ci/variables/predefined_variables.html#variables-reference for available variables
     - /kaniko/executor --context $CI_PROJECT_DIR
       --dockerfile ${DOCKERFILE}
-      --build-arg ${BUILD_ARG_1}
+      --build-arg REPOSITORY=${CI_REGISTRY_IMAGE}
+      --build-arg VERSION=${VERSION}
       --destination ${DESTINATION}
   # only:
   #   # Only build if the generating files change
