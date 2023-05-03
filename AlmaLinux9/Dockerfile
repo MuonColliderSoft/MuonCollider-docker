@@ -17,8 +17,8 @@ RUN git clone https://github.com/key4hep/key4hep-spack spack-repos/key4hep-spack
 
 # Configuring Key4hep environment
 RUN source /setenv.sh && \
-    spack repo add spack-repos/key4hep-spack && \
-    spack repo add spack-repos/mucoll-spack && \
+    spack repo add --scope system spack-repos/key4hep-spack && \
+    spack repo add --scope system spack-repos/mucoll-spack && \
     spack env create sim && \
     spack env activate sim && \
     cp spack-repos/mucoll-spack/environments/mucoll-release/*.yaml $SPACK_ENV && \
@@ -45,6 +45,9 @@ RUN source /setenv.sh && \
     spack spec -NIt && \
     spack install ${SPACK_INSTALL_OPTS} && \
     spack clean -a
+
+RUN source /setenv.sh && \
+    export > /setup.sh
 
 ENTRYPOINT ["/bin/bash", "--login"]
 
