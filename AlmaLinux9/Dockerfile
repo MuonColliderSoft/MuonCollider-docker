@@ -50,5 +50,10 @@ RUN source ${HOME}/setup_env.sh && \
 RUN source ${HOME}/setup_env.sh && \
     echo "source ${MUCOLL_STACK}" > /setup_mucoll.sh
 
+# Setting up users to be used for the local environment setup
+RUN useradd --shell /bin/bash --create-home mucoll
+USER mucoll
+WORKDIR /home/mucoll
+
 ENTRYPOINT ["/bin/bash", "--login"]
 
