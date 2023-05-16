@@ -48,7 +48,7 @@ RUN source ${HOME}/setup_env.sh && \
     spack clean -a
 
 RUN source ${HOME}/setup_env.sh && \
-    export > /setup_mucoll.sh
+    echo "source ${MUCOLL_STACK}" > /setup_mucoll.sh
 
 ENTRYPOINT ["/bin/bash", "--login"]
 
