@@ -23,8 +23,8 @@ RUN source /setenv.sh && \
     spack env create sim && \
     spack env activate sim && \
     cp spack-repos/mucoll-spack/environments/mucoll-release/*.yaml $SPACK_ENV && \
-    echo "spack env activate sim" >> ~/setenv.sh && \
-    echo "spack env st" >> ~/setenv.sh
+    echo "spack env activate sim" >> /setenv.sh && \
+    echo "spack env st" >> /setenv.sh
 
 # Concretizing the MuColl stack reusing system packages as external
 RUN source /setenv.sh && \
