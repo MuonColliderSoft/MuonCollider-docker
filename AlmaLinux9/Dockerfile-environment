@@ -21,10 +21,3 @@ RUN yum --enablerepo epel install -y gcc-toolset-12
 
 # Installing additional components for use by Spack as external packages
 RUN yum --enablerepo epel install -y cmake gettext ninja-build
-
-# Setting up users to be used for the local environment setup
-RUN echo "root" | passwd --stdin root
-RUN useradd --shell /bin/bash --create-home sim && \
-    echo "sim" | passwd --stdin sim
-USER sim
-WORKDIR /home/sim
