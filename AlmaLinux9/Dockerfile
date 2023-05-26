@@ -16,13 +16,13 @@ RUN git clone https://github.com/key4hep/key4hep-spack spack-repos/key4hep-spack
 # ADD mucoll-spack spack-repos/mucoll-spack
 
 # Configuring Key4hep environment
-RUN source /setup_spack.sh && \
+RUN source /opt/setup_spack.sh && \
     spack repo add --scope system spack-repos/key4hep-spack && \
     spack repo add --scope system spack-repos/mucoll-spack && \
     spack env create sim && \
     spack env activate sim && \
     cp spack-repos/mucoll-spack/environments/mucoll-release/*.yaml $SPACK_ENV && \
-    cat /setup_spack.sh > ${HOME}/setup_env.sh && \
+    echo "source /opt/setup_spack.sh" > ${HOME}/setup_env.sh && \
     echo "spack env activate sim" >> ${HOME}/setup_env.sh && \
     echo "spack env status" >> ${HOME}/setup_env.sh
 
@@ -48,7 +48,8 @@ RUN source ${HOME}/setup_env.sh && \
     spack clean -a
 
 RUN source ${HOME}/setup_env.sh && \
-    echo "source ${MUCOLL_STACK}" > /setup_mucoll.sh
+    echo "source ${MUCOLL_STACK}" > /opt/setup_mucoll.sh && \
+    echo "alias setup_mucoll=\"source /opt/setup_mucoll.sh\"" >> /etc/profile.d/aliases.sh
 
 # Setting up users to be used for the local environment setup
 RUN useradd --shell /bin/bash --create-home mucoll

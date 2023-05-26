@@ -25,6 +25,6 @@ A container can be started with the following command.
 docker run -ti --rm --entrypoint /bin/bash infnpd/mucoll-sim:devel-el9
 ```
 
-Two setup scripts are available for loading the environment:
-- `source /setup_spack.sh`: Load the Spack for custom environments.
-- `source /setup_mucoll.sh`: Load the Spack and setup the Muon Collider view.
+Two aliases are available for loading the environment setup scripts:
+- `setup_spack`: Load the Spack for custom environments.
+- `setup_mucoll`: Load the Spack and setup the Muon Collider view.
