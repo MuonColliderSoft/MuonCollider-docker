@@ -9,7 +9,7 @@ stages:
     entrypoint: [""]
   variables:
     DOCKERFILE: <Dockerfile path>
-    VERSION: devel
+    VERSION: ${CI_COMMIT_REF_SLUG}
     OSTAG: <Tag suffix corresponding to version>
     # Use single quotes to escape colon
     DESTINATION: '${CI_REGISTRY_IMAGE}/${IMAGE}:${VERSION}-${OSTAG}'
