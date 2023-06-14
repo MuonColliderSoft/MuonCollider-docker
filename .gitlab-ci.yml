@@ -38,22 +38,34 @@ stages:
 build-environment:
   extends: .build_template
   variables:
-    DOCKERFILE: AlmaLinux9/Dockerfile-environment
     IMAGE: mucoll-environment
-    OSTAG: el9
+  parallel:
+    matrix:
+      - DOCKERFILE: AlmaLinux9/Dockerfile-environment
+        OSTAG: el9
+      - DOCKERFILE: CentOS8/Dockerfile-environment
+        OSTAG: cs8stream
 
 build-spack:
   extends: .build_template
   variables:
-    DOCKERFILE: AlmaLinux9/Dockerfile-spack
     IMAGE: mucoll-spack
-    OSTAG: el9
   needs: [build-environment]
+  parallel:
+    matrix:
+      - DOCKERFILE: AlmaLinux9/Dockerfile-spack
+        OSTAG: el9
+      - DOCKERFILE: CentOS8/Dockerfile-spack
+        OSTAG: cs8stream
 
 build-sim:
   extends: .build_template
   variables:
-    DOCKERFILE: AlmaLinux9/Dockerfile
     IMAGE: mucoll-sim
-    OSTAG: el9
   needs: [build-spack]
+  parallel:
+    matrix:
+      - DOCKERFILE: AlmaLinux9/Dockerfile-sim
+        OSTAG: el9
+      - DOCKERFILE: CentOS8/Dockerfile-sim
+        OSTAG: cs8stream
