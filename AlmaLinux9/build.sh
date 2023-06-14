@@ -11,14 +11,21 @@ fi
 if [ "$#" -gt 1 ]; then
 	REPOSITORY=$2
 fi
+if [[ -z "${DOCKER}" ]]; then
+    DOCKER="docker"
+fi
 
+# exit when any command fails
+set -e
+
+# The actual building
 echo "### Building Docker images: ${REPOSITORY}/<IMAGE>:${VERSION}-${SUFFIX}"
 echo
-echo "### Building the OS-environment image" && \
-docker build -t ${REPOSITORY}/mucoll-environment:${VERSION}-${SUFFIX} --build-arg REPOSITORY --build-arg VERSION --progress=plain - < Dockerfile-environment && \
+echo "### Building the OS-environment image"
+${DOCKER} build -t ${REPOSITORY}/mucoll-environment:${VERSION}-${SUFFIX} --build-arg REPOSITORY --build-arg VERSION --progress=plain - < Dockerfile-environment
 #
 echo "### Building the Spack image" && \
-docker build -t ${REPOSITORY}/mucoll-spack:${VERSION}-${SUFFIX} --build-arg REPOSITORY --build-arg VERSION --progress=plain - < Dockerfile-spack && \
+${DOCKER} build -t ${REPOSITORY}/mucoll-spack:${VERSION}-${SUFFIX} --build-arg REPOSITORY --build-arg VERSION --progress=plain - < Dockerfile-spack
 #
-echo "### Building the MuColl simulation image" && \
-tar -ch . | docker build -t ${REPOSITORY}/mucoll-sim:${VERSION}-${SUFFIX} --build-arg REPOSITORY --build-arg VERSION --progress=plain -
+echo "### Building the MuColl simulation image"
+${DOCKER} build -t ${REPOSITORY}/mucoll-sim:${VERSION}-${SUFFIX} --build-arg REPOSITORY --build-arg VERSION --progress=plain - < Dockerfile-spack
