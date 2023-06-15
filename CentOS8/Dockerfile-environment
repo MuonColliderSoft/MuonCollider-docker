@@ -18,3 +18,6 @@ RUN python3 -m pip install boto3
 
 # Installing newer GCC compiler
 RUN yum --enablerepo epel install -y gcc-toolset-11
+
+# Installing additional components for use by Spack as external packages
+RUN yum --enablerepo epel install -y cmake gettext ninja-build texinfo
