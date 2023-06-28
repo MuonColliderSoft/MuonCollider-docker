@@ -1,7 +1,7 @@
 #!/bin/bash
 # USAGE: ./build.sh [<version>] [<repository>]
 
-VERSION="devel"
+VERSION="release"
 REPOSITORY="infnpd"
 SUFFIX="el9"
 
@@ -28,4 +28,4 @@ echo "### Building the Spack image" && \
 ${DOCKER} build -t ${REPOSITORY}/mucoll-spack:${VERSION}-${SUFFIX} --build-arg REPOSITORY --build-arg VERSION --progress=plain - < Dockerfile-spack
 #
 echo "### Building the MuColl simulation image"
-${DOCKER} build -t ${REPOSITORY}/mucoll-sim:${VERSION}-${SUFFIX} --build-arg REPOSITORY --build-arg VERSION --progress=plain - < Dockerfile-sim
+${DOCKER} build -t ${REPOSITORY}/mucoll-sim:${VERSION}-${SUFFIX} --build-arg REPOSITORY --build-arg VERSION --build-arg KEY4HEP_COMMIT --progress=plain - < Dockerfile-sim

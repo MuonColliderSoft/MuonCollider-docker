@@ -3,7 +3,7 @@
 #  Tag:        ${VERSION}-el9
 ###############################################################################
 
-ARG VERSION=devel
+ARG VERSION=release
 ARG REPOSITORY=infnpd
 FROM cern/alma9-base:latest
 
