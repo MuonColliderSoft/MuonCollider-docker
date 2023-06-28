@@ -1,0 +1,71 @@
+stages:
+  - build
+
+.build_template:
+  stage: build
+  image:
+    # Use CERN version of the Kaniko image
+    name: gitlab-registry.cern.ch/ci-tools/docker-image-builder
+    entrypoint: [""]
+  variables:
+    DOCKERFILE: <Dockerfile path>
+    VERSION: ${CI_COMMIT_REF_SLUG}
+    OSTAG: <Tag suffix corresponding to version>
+    # Use single quotes to escape colon
+    DESTINATION: '${CI_REGISTRY_IMAGE}/${IMAGE}:${VERSION}-${OSTAG}'
+  before_script:
+    # Prepare Kaniko configuration file
+    - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" > /kaniko/.docker/config.json
+  script:
+    - printenv
+    # Build and push the image from the given Dockerfile
+    # See https://docs.gitlab.com/ee/ci/variables/predefined_variables.html#variables-reference for available variables
+    - /kaniko/executor --context $CI_PROJECT_DIR
+      --dockerfile ${DOCKERFILE}
+      --build-arg REPOSITORY=${CI_REGISTRY_IMAGE}
+      --build-arg VERSION=${VERSION}
+      --destination ${DESTINATION}
+    - echo /kaniko/executor --context $CI_PROJECT_DIR
+      --dockerfile ${DOCKERFILE}
+      --build-arg REPOSITORY=${CI_REGISTRY_IMAGE}
+      --build-arg VERSION=${VERSION}
+      --destination ${DESTINATION}
+  # only:
+  #   # Only build if the generating files change
+  #   changes:
+  #     - ${DOCKERFILE}
+
+build-environment:
+  extends: .build_template
+  variables:
+    IMAGE: mucoll-environment
+  parallel:
+    matrix:
+      - DOCKERFILE: AlmaLinux9/Dockerfile-environment
+        OSTAG: el9
+      - DOCKERFILE: CentOS8/Dockerfile-environment
+        OSTAG: cs8stream
+
+build-spack:
+  extends: .build_template
+  variables:
+    IMAGE: mucoll-spack
+  needs: [build-environment]
+  parallel:
+    matrix:
+      - DOCKERFILE: AlmaLinux9/Dockerfile-spack
+        OSTAG: el9
+      - DOCKERFILE: CentOS8/Dockerfile-spack
+        OSTAG: cs8stream
+
+build-sim:
+  extends: .build_template
+  variables:
+    IMAGE: mucoll-sim
+  needs: [build-spack]
+  parallel:
+    matrix:
+      - DOCKERFILE: AlmaLinux9/Dockerfile-sim
+        OSTAG: el9
+      - DOCKERFILE: CentOS8/Dockerfile-sim
+        OSTAG: cs8stream

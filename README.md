@@ -3,15 +3,28 @@ Docker files for Muon Collider software
 
 ## Building the images
 The incremental images for the framework can be built with the following command:
-```
-cd CentOS8
-docker build -f Dockerfile-environment -t infnpd/mucoll-environment:1.6-centos8stream .
-docker build -f Dockerfile-ilc-base -t infnpd/mucoll-ilc-base:1.6-centos8stream .
-docker build -f Dockerfile-ilc-framework -t infnpd/mucoll-ilc-framework:1.6-centos8stream .
+
+```shell
+cd AlmaLinux8
+./build.sh
 ```
 
-A useful way to test the image is running a shell on the container:
+The build script will create images under the `infnpd` repository and the
+`devel` tag.
+
+Three images are created in sucession:
+- `infnpd/mucoll-environment:devel-el9`: Base OS with developement tools and any other needed system packages.
+- `infnpd/mucoll-spack:devel-el9`: Contains an installation of Spack under `/opt/spack`.
+- `infnpd/mucoll-sim:devel-el9`: Contains the Muon Collider software stack as a Spack environment.
+
+## Running the images
+
+A container can be started with the following command.
+
+```shell
+docker run -ti --rm --entrypoint /bin/bash infnpd/mucoll-sim:devel-el9
 ```
-docker run -ti --rm --entrypoint /bin/bash infnpd/mucoll-ilc-framework:1.6-centos8stream
-```
-and inspect its content.
+
+Two aliases are available for loading the environment setup scripts:
+- `setup_spack`: Load the Spack for custom environments.
+- `setup_mucoll`: Load the Spack and setup the Muon Collider view.

@@ -9,20 +9,20 @@ FROM ${REPOSITORY}/mucoll-environment:${VERSION}-el9
 
 # Setting up Spack
 RUN git clone --depth=1 --branch v0.19.1 https://github.com/spack/spack.git /opt/spack && \
-    echo "source /opt/rh/gcc-toolset-12/enable" >> /setenv.sh && \
-    echo "source /opt/spack/share/spack/setup-env.sh" >> /setenv.sh
+    echo "source /opt/spack/share/spack/setup-env.sh" >> /opt/setup_spack.sh && \
+    echo "alias setup_spack=\"source /opt/setup_spack.sh\"" >> /etc/profile.d/aliases.sh
 
 # Registering compilers with Spack
 ENV SPACK_COLOR="always"
-RUN source /setenv.sh && \
+RUN source /opt/setup_spack.sh && \
     spack compiler find && \
     spack compilers && \
     spack spec cmake
 
 # Enabling use of LD_LIBRARY - required for proper run-environment setup
-RUN source /setenv.sh && \
+RUN source /opt/setup_spack.sh && \
     spack config add modules:prefix_inspections:lib64:[LD_LIBRARY_PATH] && \
     spack config add modules:prefix_inspections:lib:[LD_LIBRARY_PATH]
 # Adding system build packages as external (to speed up installation)
-RUN source /setenv.sh && \
+RUN source /opt/setup_spack.sh && \
     spack external find
