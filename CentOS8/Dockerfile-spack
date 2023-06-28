@@ -8,7 +8,7 @@ ARG REPOSITORY=infnpd
 FROM ${REPOSITORY}/mucoll-environment:${VERSION}-cs8stream
 
 # Setting up Spack
-RUN git clone --depth=1 --branch v0.19.1 https://github.com/spack/spack.git /opt/spack && \
+RUN git clone --depth=1 https://github.com/spack/spack.git /opt/spack && \
     echo "source /opt/rh/gcc-toolset-11/enable" >> /opt/setup_spack.sh && \
     echo "source /opt/spack/share/spack/setup-env.sh" >> /opt/setup_spack.sh && \
     echo "alias setup_spack=\"source /opt/setup_spack.sh\"" >> /etc/profile.d/aliases.sh
