@@ -17,4 +17,4 @@ RUN yum --enablerepo epel groupinstall -y "Development Tools" && \
 RUN python3 -m pip install boto3
 
 # Installing additional components for use by Spack as external packages
-RUN yum --enablerepo epel install -y cmake gettext ninja-build texinfo
+RUN yum --enablerepo epel install -y cmake gettext ninja-build texinfo groff
