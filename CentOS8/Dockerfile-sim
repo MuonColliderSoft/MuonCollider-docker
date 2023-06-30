@@ -8,9 +8,18 @@ ARG REPOSITORY=infnpd
 FROM ${REPOSITORY}/mucoll-spack:${VERSION}-cs8stream
 
 # Adding repositories: Key4hep + MuColl
+ARG KEY4HEP_COMMIT=f6a53faaf9b82ab904f7d37a0a0a97eaeda5d2b7
+ARG MUCOLL_VERSION=release
+
 RUN mkdir spack-repos
 RUN git clone https://github.com/key4hep/key4hep-spack spack-repos/key4hep-spack && \
-    git clone https://github.com/MuonColliderSoft/mucoll-spack spack-repos/mucoll-spack
+    git clone https://github.com/MuonColliderSoft/mucoll-spack spack-repos/mucoll-spack --depth 1 --branch ${MUCOLL_VERSION}
+
+# Using specific commit of Key4hep repository if requested
+RUN if [ -n "${KEY4HEP_COMMIT}" ]; then \
+      cd spack-repos/key4hep-spack; \
+      git checkout ${KEY4HEP_COMMIT}; \
+    fi
 
 # Configuring Key4hep environment
 RUN source /opt/setup_spack.sh && \
