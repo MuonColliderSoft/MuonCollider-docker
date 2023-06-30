@@ -17,7 +17,7 @@ RUN yum --enablerepo epel groupinstall -y "Development Tools" && \
 RUN python3 -m pip install boto3
 
 # Installing newer GCC compiler
-RUN yum --enablerepo epel install -y gcc-toolset-11
+RUN yum --enablerepo epel install -y gcc-toolset-11 gcc-toolset-11-binutils-devel
 
 # Installing additional components for use by Spack as external packages
-RUN yum --enablerepo epel install -y cmake gettext ninja-build texinfo groff binutils-devel
+RUN yum --enablerepo epel install -y cmake gettext ninja-build texinfo groff
