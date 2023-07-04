@@ -8,7 +8,7 @@ ARG REPOSITORY=infnpd
 FROM ${REPOSITORY}/mucoll-spack:${VERSION}-cs8stream
 
 # Adding repositories: Key4hep + MuColl
-ARG KEY4HEP_COMMIT=483a10d9dae242f11d90a5f54b234b8502f560d6
+ARG KEY4HEP_COMMIT=e028ed570463a4d995a4562365ea16ee7d915606
 ARG MUCOLL_VERSION=release
 
 RUN mkdir spack-repos
