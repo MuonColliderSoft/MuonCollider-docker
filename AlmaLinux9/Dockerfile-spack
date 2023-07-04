@@ -7,10 +7,19 @@ ARG VERSION=release
 ARG REPOSITORY=infnpd
 FROM ${REPOSITORY}/mucoll-environment:${VERSION}-el9
 
+# Adding repositories: Spack
+ARG SPACK_COMMIT=97972d300a81d424cfb9c5cf3f7b0933cc15f7dc
+
 # Setting up Spack
 RUN git clone --depth=1 https://github.com/spack/spack.git /opt/spack && \
     echo "source /opt/spack/share/spack/setup-env.sh" >> /opt/setup_spack.sh && \
     echo "alias setup_spack=\"source /opt/setup_spack.sh\"" >> /etc/profile.d/aliases.sh
+
+# Using specific commit of Key4hep repository if requested
+RUN if [ -n "${SPACK_COMMIT}" ]; then \
+      cd /opt/spack; \
+      git checkout ${SPACK_COMMIT}; \
+    fi
 
 # Registering compilers with Spack
 ENV SPACK_COLOR="always"

@@ -24,7 +24,6 @@ RUN if [ -n "${KEY4HEP_COMMIT}" ]; then \
       git checkout ${KEY4HEP_COMMIT}; \
     fi
 
-
 # Configuring Key4hep environment
 RUN source /opt/setup_spack.sh && \
     spack repo add --scope system spack-repos/key4hep-spack && \
