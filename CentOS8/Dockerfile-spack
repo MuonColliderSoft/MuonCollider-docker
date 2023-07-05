@@ -3,7 +3,7 @@
 #  Tag:        ${VERSION}-cs8stream
 ###############################################################################
 
-ARG VERSION=devel
+ARG VERSION=release
 ARG REPOSITORY=infnpd
 FROM ${REPOSITORY}/mucoll-environment:${VERSION}-cs8stream
 
