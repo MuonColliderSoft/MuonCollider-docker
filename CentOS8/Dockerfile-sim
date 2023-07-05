@@ -9,16 +9,22 @@ FROM ${REPOSITORY}/mucoll-spack:${VERSION}-cs8stream
 
 # Adding repositories: Key4hep + MuColl
 ARG KEY4HEP_COMMIT=e028ed570463a4d995a4562365ea16ee7d915606
-ARG MUCOLL_VERSION=release
+ARG MUCOLL_COMMIT=14c39a25017ba3332994b69ce28709f2aae0005d
 
 RUN mkdir spack-repos
 RUN git clone https://github.com/key4hep/key4hep-spack spack-repos/key4hep-spack && \
-    git clone https://github.com/MuonColliderSoft/mucoll-spack spack-repos/mucoll-spack --depth 1 --branch ${MUCOLL_VERSION}
+    git clone https://github.com/MuonColliderSoft/mucoll-spack spack-repos/mucoll-spack
 
 # Using specific commit of Key4hep repository if requested
 RUN if [ -n "${KEY4HEP_COMMIT}" ]; then \
       cd spack-repos/key4hep-spack; \
       git checkout ${KEY4HEP_COMMIT}; \
+    fi
+
+# Using specific commit of MuColl repository if requested
+RUN if [ -n "${MUCOLL_COMMIT}" ]; then \
+      cd spack-repos/mucoll-spack; \
+      git checkout ${MUCOLL_COMMIT}; \
     fi
 
 # Configuring Key4hep environment
