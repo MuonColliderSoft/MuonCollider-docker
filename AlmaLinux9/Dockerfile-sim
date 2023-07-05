@@ -30,7 +30,7 @@ RUN source /opt/setup_spack.sh && \
     spack repo add --scope system spack-repos/mucoll-spack && \
     spack env create sim && \
     spack env activate sim && \
-    cp spack-repos/mucoll-spack/environments/mucoll-release/*.yaml $SPACK_ENV && \
+    cp spack-repos/mucoll-spack/environments/mucoll-release/*.yaml ${SPACK_ENV} && \
     echo "source /opt/setup_spack.sh" > ${HOME}/setup_env.sh && \
     echo "spack env activate sim" >> ${HOME}/setup_env.sh && \
     echo "spack env status" >> ${HOME}/setup_env.sh
