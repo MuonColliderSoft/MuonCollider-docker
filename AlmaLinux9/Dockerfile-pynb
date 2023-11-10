@@ -1,5 +1,5 @@
 ###############################################################################
-#  Repository: mucoll-pynb
+#  Repository: infnpd/mucoll-pynb
 #  Tag:        1.8-almalinux9
 ###############################################################################
 
@@ -13,7 +13,7 @@ RUN wget -O /etc/yum.repos.d/geant4.repo https://nexus.pd.infn.it/artifacts/repo
     wget -O /etc/yum.repos.d/mc-key4hep.repo https://nexus.pd.infn.it/artifacts/repository/repo-files/mc-key4hep.repo
 
 RUN yum -y install muonc-base-installation podio python3-podio python3-podio-utils edm4hep \
-                   gaudi gaudi-tools python3-gaudi key4hep-edm4hep2lcio key4hep-fw-core \
+                   gaudi gaudi-tools python3-gaudi gaudi-devel key4hep-edm4hep2lcio key4hep-fw-core \
                    key4hep-lcio-reader key4hep-marlin-wrapper python3-k4marlin-wrapper \
                    python3-pip python3-jupyroot && \
     geant4-dataset-download && \
