@@ -24,10 +24,13 @@ RUN git clone https://github.com/MuonColliderSoft/mucoll-spack spack-repos/mucol
       git checkout ${MUCOLL_COMMIT}; \
     fi
 
-# Configuring Key4hep environment
+# Add the package repositories
 RUN source /opt/setup_spack.sh && \
     spack repo add --scope system spack-repos/key4hep-spack && \
-    spack repo add --scope system spack-repos/mucoll-spack && \
+    spack repo add --scope system spack-repos/mucoll-spack
+
+# Create the release environment
+RUN source /opt/setup_spack.sh && \
     spack env create sim && \
     spack env activate sim && \
     cp spack-repos/mucoll-spack/environments/mucoll-release/*.yaml ${SPACK_ENV} && \
