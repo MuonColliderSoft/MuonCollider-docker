@@ -12,7 +12,6 @@ ARG KEY4HEP_COMMIT=354e3ce1e2c284c6516e34b60d2934e894078be2
 ARG MUCOLL_COMMIT=5e040f4e2c4200c0f62061cbef02ee83b6208cb2
 
 RUN source /opt/setup_spack.sh && \
-    export && \
     mkdir ${SPACK_ROOT}/var/spack-repos
 
 RUN source /opt/setup_spack.sh && \
@@ -33,18 +32,19 @@ RUN source /opt/setup_spack.sh && \
 
 # Apply patches to spack :shrug:
 RUN source /opt/setup_spack.sh && \
+    cd ${SPACK_ROOT} && \
     source ${SPACK_ROOT}/var/spack-repos/key4hep-spack/.cherry-pick
 
 # Add the package repositories
 RUN source /opt/setup_spack.sh && \
-    spack repo add --scope system spack-repos/key4hep-spack && \
-    spack repo add --scope system spack-repos/mucoll-spack
+    spack repo add --scope system ${SPACK_ROOT}/var/spack-repos/key4hep-spack && \
+    spack repo add --scope system ${SPACK_ROOT}/var/spack-repos/mucoll-spack
 
 # Create the release environment
 RUN source /opt/setup_spack.sh && \
     spack env create sim && \
     spack env activate sim && \
-    cp spack-repos/mucoll-spack/environments/mucoll-release/*.yaml ${SPACK_ENV} && \
+    cp ${SPACK_ROOT}/var/spack-repos/mucoll-spack/environments/mucoll-release/*.yaml ${SPACK_ENV} && \
     echo "source /opt/setup_spack.sh" > ${HOME}/setup_env.sh && \
     echo "spack env activate sim" >> ${HOME}/setup_env.sh && \
     echo "spack env status" >> ${HOME}/setup_env.sh
