@@ -25,14 +25,4 @@ RUN if [ -n "${SPACK_COMMIT}" ]; then \
 # Registering compilers with Spack
 ENV SPACK_COLOR="always"
 RUN source /opt/setup_spack.sh && \
-    spack compiler find && \
-    spack compilers && \
-    spack spec cmake
-
-# Enabling use of LD_LIBRARY - required for proper run-environment setup
-RUN source /opt/setup_spack.sh && \
-    spack config add modules:prefix_inspections:lib64:[LD_LIBRARY_PATH] && \
-    spack config add modules:prefix_inspections:lib:[LD_LIBRARY_PATH]
-# Adding system build packages as external (to speed up installation)
-RUN source /opt/setup_spack.sh && \
-    spack external find
+    spack compiler find

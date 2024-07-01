@@ -9,35 +9,45 @@ FROM ${REPOSITORY}/mucoll-spack:${VERSION}-cs8stream
 
 # Adding repositories: Key4hep + MuColl
 ARG KEY4HEP_COMMIT=354e3ce1e2c284c6516e34b60d2934e894078be2
-ARG MUCOLL_COMMIT=5e040f4e2c4200c0f62061cbef02ee83b6208cb2
+ARG MUCOLL_COMMIT=cb2a1b9cb791c87ef7777d706275fcd0df61635c
 
-RUN mkdir spack-repos
-RUN git clone https://github.com/key4hep/key4hep-spack spack-repos/key4hep-spack && \
+RUN source /opt/setup_spack.sh && \
+    REPOPATH=${SPACK_ROOT}/var/key4hep-spack && \
+    git clone https://github.com/key4hep/key4hep-spack ${REPOPATH} && \
     if [ -n "${KEY4HEP_COMMIT}" ]; then \
-      cd spack-repos/key4hep-spack; \
+      cd ${REPOPATH}; \
       git checkout ${KEY4HEP_COMMIT}; \
     fi
 
-RUN git clone https://github.com/MuonColliderSoft/mucoll-spack spack-repos/mucoll-spack && \
+RUN source /opt/setup_spack.sh && \
+    REPOPATH=${SPACK_ROOT}/var/mucoll-spack && \
+    git clone https://github.com/MuonColliderSoft/mucoll-spack ${REPOPATH} && \
     if [ -n "${MUCOLL_COMMIT}" ]; then \
-      cd spack-repos/mucoll-spack; \
+      cd ${REPOPATH}; \
       git checkout ${MUCOLL_COMMIT}; \
     fi
 
-# Configuring Key4hep environment
+# Apply patches to spack :shrug:
 RUN source /opt/setup_spack.sh && \
-    spack repo add --scope system spack-repos/key4hep-spack && \
-    spack repo add --scope system spack-repos/mucoll-spack && \
+    cd ${SPACK_ROOT} && \
+    source ${SPACK_ROOT}/var/key4hep-spack/.cherry-pick
+
+# Add the package repositories
+RUN source /opt/setup_spack.sh && \
+    spack repo add --scope system ${SPACK_ROOT}/var/key4hep-spack && \
+    spack repo add --scope system ${SPACK_ROOT}/var/mucoll-spack
+
+# Create the release environment
+RUN source /opt/setup_spack.sh && \
     spack env create sim && \
     spack env activate sim && \
-    cp spack-repos/mucoll-spack/environments/mucoll-release/*.yaml ${SPACK_ENV} && \
+    cp ${SPACK_ROOT}/var/mucoll-spack/environments/mucoll-release/*.yaml ${SPACK_ENV} && \
     echo "source /opt/setup_spack.sh" > ${HOME}/setup_env.sh && \
     echo "spack env activate sim" >> ${HOME}/setup_env.sh && \
     echo "spack env status" >> ${HOME}/setup_env.sh
 
 # Concretizing the MuColl stack reusing system packages as external
 RUN source ${HOME}/setup_env.sh && \
-    spack add mucoll-stack && \
     spack concretize --reuse
 
 # Installing fragments of dependency tree in separate layers for cached debugging
