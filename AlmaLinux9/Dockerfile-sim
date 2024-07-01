@@ -50,7 +50,7 @@ RUN source /opt/setup_spack.sh && \
     echo "spack env status" >> ${HOME}/setup_env.sh
 
 # Concretizing the MuColl stack reusing system packages as external
-RUN ls && echo ${HOME} && cat ${HOME}/setup_env.sh && find /opt/spack/var && source ${HOME}/setup_env.sh && \
+RUN echo ${HOME}/setup_env.sh && cat ${HOME}/setup_env.sh && source ${HOME}/setup_env.sh && \
     spack concretize --reuse
 
 # Installing fragments of dependency tree in separate layers for cached debugging
