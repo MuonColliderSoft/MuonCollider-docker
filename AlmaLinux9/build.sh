@@ -21,8 +21,6 @@ set -e
 # The actual building
 echo "### Building Docker images: ${REPOSITORY}/<IMAGE>:${VERSION}-${SUFFIX}"
 echo
-echo "### Building the OS-environment image"
-${DOCKER} build -t ${REPOSITORY}/mucoll-environment:${VERSION}-${SUFFIX} --build-arg REPOSITORY --build-arg VERSION --progress=plain - < Dockerfile-environment
 #
 echo "### Building the Spack image" && \
 ${DOCKER} build -t ${REPOSITORY}/mucoll-spack:${VERSION}-${SUFFIX} --build-arg REPOSITORY --build-arg VERSION --progress=plain - < Dockerfile-spack

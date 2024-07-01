@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        os: [{dir: CentOS8,suffix: cs8stream}, {dir: AlmaLinux9,suffix: el9}]
+        os: [{dir: AlmaLinux9,suffix: el9}]
     steps:
       - 
         name: Checkout
@@ -38,15 +38,6 @@ jobs:
         uses: docker/metadata-action@v4
         with:
           images: ${{ secrets.DOCKERHUB_REPOSITORY }}/mucoll-dummy
-      -
-        name: Build and Push (mucoll-environment)
-        id: docker_build_mucoll-environment
-        uses: docker/build-push-action@v4
-        with:
-          push: true
-          context: ./${{matrix.os.dir}}
-          file: ./${{matrix.os.dir}}/Dockerfile-environment
-          tags: ${{ secrets.DOCKERHUB_REPOSITORY }}/mucoll-environment:${{steps.meta.outputs.version}}-${{matrix.os.suffix}}
       -
         name: Build and Push (mucoll-spack)
         id: docker_build_mucoll-spack
