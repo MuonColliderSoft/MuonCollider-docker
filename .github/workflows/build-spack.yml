@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        os: [{dir: AlmaLinux9,suffix: el9}]
+        os: [{dir: AlmaLinux9,suffix: alma9}]
     steps:
       - 
         name: Checkout

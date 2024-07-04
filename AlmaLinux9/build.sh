@@ -3,7 +3,7 @@
 
 VERSION="release"
 REPOSITORY="infnpd"
-SUFFIX="el9"
+SUFFIX="alma9"
 
 if [ "$#" -gt 0 ]; then
 	VERSION=$1
