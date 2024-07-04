@@ -33,7 +33,7 @@ RUN source /opt/setup_spack.sh && \
     source ${SPACK_ROOT}/var/key4hep-spack/.cherry-pick
 
 # Apply our patches to spack
-ADD patches
+ADD patches ./
 RUN source /opt/setup_spack.sh && \
     ./patches/apply.sh
 
