@@ -1,11 +1,11 @@
 ###############################################################################
 #  Repository: ${REPOSITORY}/mucoll-sim
-#  Tag:        ${VERSION}-el9
+#  Tag:        ${VERSION}-alma9
 ###############################################################################
 
 ARG VERSION=release
 ARG REPOSITORY=infnpd
-FROM ${REPOSITORY}/mucoll-spack:${VERSION}-el9
+FROM ${REPOSITORY}/mucoll-spack:${VERSION}-alma9
 
 # Adding repositories: Key4hep + MuColl
 ARG KEY4HEP_COMMIT=354e3ce1e2c284c6516e34b60d2934e894078be2
@@ -27,10 +27,15 @@ RUN source /opt/setup_spack.sh && \
       git checkout ${MUCOLL_COMMIT}; \
     fi
 
-# Apply patches to spack :shrug:
+# Apply recommended patches to spack :shrug:
 RUN source /opt/setup_spack.sh && \
     cd ${SPACK_ROOT} && \
     source ${SPACK_ROOT}/var/key4hep-spack/.cherry-pick
+
+# Apply our patches to spack
+ADD patches
+RUN source /opt/setup_spack.sh && \
+    ./patches/apply.sh
 
 # Add the package repositories
 RUN source /opt/setup_spack.sh && \
