@@ -8,6 +8,7 @@ stages:
     name: gitlab-registry.cern.ch/ci-tools/docker-image-builder
     entrypoint: [""]
   variables:
+    CONTEXT: .
     DOCKERFILE: <Dockerfile path>
     VERSION: ${CI_COMMIT_REF_SLUG}
     OSTAG: <Tag suffix corresponding to version>
@@ -20,12 +21,12 @@ stages:
     - printenv
     # Build and push the image from the given Dockerfile
     # See https://docs.gitlab.com/ee/ci/variables/predefined_variables.html#variables-reference for available variables
-    - /kaniko/executor --context $CI_PROJECT_DIR
+    - /kaniko/executor --context ${CI_PROJECT_DIR}/${CONTEXT}
       --dockerfile ${DOCKERFILE}
       --build-arg REPOSITORY=${CI_REGISTRY_IMAGE}
       --build-arg VERSION=${VERSION}
       --destination ${DESTINATION}
-    - echo /kaniko/executor --context $CI_PROJECT_DIR
+    - echo /kaniko/executor --context ${CI_PROJECT_DIR}/${CONTEXT}
       --dockerfile ${DOCKERFILE}
       --build-arg REPOSITORY=${CI_REGISTRY_IMAGE}
       --build-arg VERSION=${VERSION}
@@ -41,7 +42,8 @@ build-spack:
     IMAGE: mucoll-spack
   parallel:
     matrix:
-      - DOCKERFILE: AlmaLinux9/Dockerfile-spack
+      - CONTEXT: AlmaLinux9
+        DOCKERFILE: Dockerfile-spack
         OSTAG: alma9
 
 build-sim:
@@ -51,5 +53,6 @@ build-sim:
   needs: [build-spack]
   parallel:
     matrix:
-      - DOCKERFILE: AlmaLinux9/Dockerfile-sim
+      - CONTEXT: AlmaLinux9
+        DOCKERFILE: Dockerfile-sim
         OSTAG: alma9
