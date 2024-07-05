@@ -8,5 +8,5 @@ cd ${SPACK_ROOT}
 for PATCH in $PATCHDIR/*.patch;
 do
     echo "Applying $(basename ${PATCH})"
-    patch ${PATCH}
+    patch -p1 < ${PATCH}
 done
