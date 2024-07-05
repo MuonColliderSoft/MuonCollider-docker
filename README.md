@@ -13,16 +13,16 @@ The build script will create images under the `infnpd` repository and the
 `devel` tag.
 
 Three images are created in sucession:
-- `infnpd/mucoll-environment:devel-el9`: Base OS with developement tools and any other needed system packages.
-- `infnpd/mucoll-spack:devel-el9`: Contains an installation of Spack under `/opt/spack`.
-- `infnpd/mucoll-sim:devel-el9`: Contains the Muon Collider software stack as a Spack environment.
+- `infnpd/mucoll-environment:devel-alma9`: Base OS with developement tools and any other needed system packages.
+- `infnpd/mucoll-spack:devel-alma9`: Contains an installation of Spack under `/opt/spack`.
+- `infnpd/mucoll-sim:devel-alma9`: Contains the Muon Collider software stack as a Spack environment.
 
 ## Running the images
 
 A container can be started with the following command.
 
 ```shell
-docker run -ti --rm --entrypoint /bin/bash infnpd/mucoll-sim:devel-el9
+docker run -ti --rm --entrypoint /bin/bash infnpd/mucoll-sim:devel-alma9
 ```
 
 Two aliases are available for loading the environment setup scripts:
