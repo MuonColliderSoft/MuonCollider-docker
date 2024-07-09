@@ -27,15 +27,11 @@ RUN source /opt/setup_spack.sh && \
       git checkout ${MUCOLL_COMMIT}; \
     fi
 
-# Apply recommended patches to spack :shrug:
-RUN source /opt/setup_spack.sh && \
-    cd ${SPACK_ROOT} && \
-    source ${SPACK_ROOT}/var/key4hep-spack/.cherry-pick
-
 # Apply our patches to spack
 COPY patches patches
 RUN source /opt/setup_spack.sh && \
-    ./patches/apply.sh
+    ./patches/key4hep-patches.sh && \
+    ./patches/my-patches.sh
 
 # Add the package repositories
 RUN source /opt/setup_spack.sh && \
