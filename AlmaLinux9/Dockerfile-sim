@@ -59,14 +59,6 @@ RUN source ${HOME}/setup_env.sh && \
 ENV SPACK_INSTALL_OPTS "--only-concrete --no-add --fail-fast"
 
 RUN source ${HOME}/setup_env.sh && \
-    spack spec -NIt root && \
-    spack install ${SPACK_INSTALL_OPTS} root && \
-    spack clean -a
-RUN source ${HOME}/setup_env.sh && \
-    spack spec -NIt dd4hep && \
-    spack install ${SPACK_INSTALL_OPTS} dd4hep && \
-    spack clean -a
-RUN source ${HOME}/setup_env.sh && \
     spack spec -NIt && \
     spack install ${SPACK_INSTALL_OPTS} && \
     spack clean -a
