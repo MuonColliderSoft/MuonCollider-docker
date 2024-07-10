@@ -9,7 +9,7 @@ FROM ${REPOSITORY}/mucoll-spack:${VERSION}-alma9
 
 # Adding repositories: Key4hep + MuColl
 ARG KEY4HEP_COMMIT=dc0b2bc4aaad8f3ef5f3c7f62ff5b0277a554eee
-ARG MUCOLL_COMMIT=654af2f9ea8dd907d83438b486ce07c03c9d38bc
+ARG MUCOLL_COMMIT=31ee373c31eccad25a3472fd3a10de7125bcabdd
 
 RUN source /opt/setup_spack.sh && \
     REPOPATH=${SPACK_ROOT}/var/key4hep-spack && \
