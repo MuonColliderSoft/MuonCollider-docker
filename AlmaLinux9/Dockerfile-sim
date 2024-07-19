@@ -9,7 +9,7 @@ FROM ${REPOSITORY}/mucoll-spack:${VERSION}-alma9
 
 # Adding repositories: Key4hep + MuColl
 ARG KEY4HEP_COMMIT=dc0b2bc4aaad8f3ef5f3c7f62ff5b0277a554eee
-ARG MUCOLL_COMMIT=89cea39f129f3548b6bec8114b24112c20ed12b6
+ARG MUCOLL_COMMIT=3c205e7ac5c1a4536287c985ed7c81d79cd9a357
 
 RUN source /opt/setup_spack.sh && \
     REPOPATH=${SPACK_ROOT}/var/key4hep-spack && \
@@ -50,7 +50,6 @@ RUN source /opt/setup_spack.sh && \
 # Concretizing the MuColl stack reusing system packages as external
 RUN source ${HOME}/setup_env.sh && \
     spack add mucoll-stack@2.9 && \
-    spack add cmake && \
     spack concretize --reuse --deprecated
 
 # Installing fragments of dependency tree in separate layers for cached debugging
