@@ -1,0 +1,34 @@
+###############################################################################
+#  Repository: mucoll-spack-full
+#  Tag:        2.9-almalinux9
+###############################################################################
+
+FROM almalinux:9.4
+
+RUN yum -y install epel-release yum-utils wget && \
+    yum-config-manager --set-enabled appstream crb extras plus && \
+    yum -y install cmake make autoconf automake m4 libtool pkgconf \
+    perl patch tar gzip unzip bzip2 bzip2-devel xz-devel gnupg2 git \
+    patchelf gcc-c++ gcc-gfortran python3-devel bison \
+    flex diffutils findutils hostname iproute python3-pip \
+    python3-setuptools texlive-epstopdf-pkg
+
+RUN cd /opt && git clone -c feature.manyFiles=true https://github.com/spack/spack.git && \
+    cd spack && git checkout develop-2024-06-23 && \
+    curl https://pandora.infn.it/public/cb7750/dl/spack-develop-2024-06-23-env-fix.patch | patch -p1 && \
+    cd /opt && git clone https://github.com/key4hep/key4hep-spack.git && \
+    cd key4hep-spack && git checkout dc0b2bc4aaad8f3ef5f3c7f62ff5b0277a554eee && \
+    cd /opt && git clone https://github.com/MuonColliderSoft/mucoll-spack.git && \
+    cd mucoll-spack && git checkout v2.9 && \
+    cp /opt/spack/share/spack/setup-env.sh /etc/profile.d/spack-setup.sh
+
+RUN source /opt/spack/share/spack/setup-env.sh && \
+    spack spec clingo && spack compilers && \
+    spack repo add /opt/key4hep-spack && \
+    spack repo add /opt/mucoll-spack && \
+    spack env create mucoll-env /opt/mucoll-spack/environments/mucoll-release/spack.yaml && \
+    spack env activate mucoll-env && spack add mucoll-stack && \
+    spack concretize --reuse --deprecated && spack install --fail-fast --deprecated
+
+ENTRYPOINT [ "/bin/bash" ]
+
