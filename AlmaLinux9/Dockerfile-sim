@@ -1,0 +1,73 @@
+###############################################################################
+#  Repository: ${REPOSITORY}/mucoll-sim
+#  Tag:        ${VERSION}-alma9
+###############################################################################
+
+ARG VERSION=release
+ARG REPOSITORY=infnpd
+FROM ${REPOSITORY}/mucoll-spack:${VERSION}-alma9
+
+# Adding repositories: Key4hep + MuColl
+ARG KEY4HEP_COMMIT=dc0b2bc4aaad8f3ef5f3c7f62ff5b0277a554eee
+ARG MUCOLL_COMMIT=7c7b4e01f999056d65787b35b063a1b129c67638
+
+RUN source /opt/setup_spack.sh && \
+    REPOPATH=${SPACK_ROOT}/var/key4hep-spack && \
+    git clone https://github.com/key4hep/key4hep-spack ${REPOPATH} && \
+    if [ -n "${KEY4HEP_COMMIT}" ]; then \
+      cd ${REPOPATH}; \
+      git checkout ${KEY4HEP_COMMIT}; \
+    fi
+
+RUN source /opt/setup_spack.sh && \
+    REPOPATH=${SPACK_ROOT}/var/mucoll-spack && \
+    git clone https://github.com/MuonColliderSoft/mucoll-spack ${REPOPATH} && \
+    if [ -n "${MUCOLL_COMMIT}" ]; then \
+      cd ${REPOPATH}; \
+      git checkout ${MUCOLL_COMMIT}; \
+    fi
+
+# Apply our patches to spack
+COPY apply_patches.sh ./apply_patches.sh
+RUN source /opt/setup_spack.sh && \
+    ./apply_patches.sh ${SPACK_ROOT}/var/key4hep-spack && \
+    ./apply_patches.sh ${SPACK_ROOT}/var/mucoll-spack
+
+# Add the package repositories
+RUN source /opt/setup_spack.sh && \
+    spack repo add --scope system ${SPACK_ROOT}/var/key4hep-spack && \
+    spack repo add --scope system ${SPACK_ROOT}/var/mucoll-spack
+
+# Create the release environment
+RUN source /opt/setup_spack.sh && \
+    spack env create sim && \
+    spack env activate sim && \
+    cp ${SPACK_ROOT}/var/mucoll-spack/environments/mucoll-release/*.yaml ${SPACK_ENV} && \
+    echo "source /opt/setup_spack.sh" > ${HOME}/setup_env.sh && \
+    echo "spack env activate sim" >> ${HOME}/setup_env.sh && \
+    echo "spack env status" >> ${HOME}/setup_env.sh
+
+# Concretizing the MuColl stack reusing system packages as external
+RUN source ${HOME}/setup_env.sh && \
+    spack add mucoll-stack@2.9 && \
+    spack concretize --reuse --deprecated
+
+# Installing fragments of dependency tree in separate layers for cached debugging
+ENV SPACK_INSTALL_OPTS "--only-concrete --no-add --fail-fast --deprecated"
+
+RUN source ${HOME}/setup_env.sh && \
+    spack spec -NIt && \
+    spack install ${SPACK_INSTALL_OPTS} && \
+    spack clean -a
+
+RUN source ${HOME}/setup_env.sh && \
+    echo "source ${SPACK_ENV}/.spack-env/view/setup.sh" > /opt/setup_mucoll.sh && \
+    echo "alias setup_mucoll=\"source /opt/setup_mucoll.sh\"" >> /etc/profile.d/aliases.sh
+
+# Setting up users to be used for the local environment setup
+RUN useradd --shell /bin/bash --create-home mucoll
+USER mucoll
+WORKDIR /home/mucoll
+
+ENTRYPOINT ["/bin/bash", "--login"]
+

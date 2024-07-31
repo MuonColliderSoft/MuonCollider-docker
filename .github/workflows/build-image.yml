@@ -3,14 +3,20 @@ on:
   push:
     branches:
       - 'master'
+      - 'main'
+      - 'key4hep*'
     tags:
       - 'v*'
   pull_request:
     branches:
       - 'master'
+      - 'main'
 jobs:
   build:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        os: [{dir: AlmaLinux9,suffix: alma9}]
     steps:
       - 
         name: Checkout
@@ -19,49 +25,41 @@ jobs:
           fetch-depth: 0
       -
         name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v1
+        uses: docker/setup-buildx-action@v2
       -
         name: Login to DockerHub
-        uses: docker/login-action@v1 
+        uses: docker/login-action@v2
         with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
       -
         name: Docker Meta
         id: meta
-        uses: docker/metadata-action@v3
+        uses: docker/metadata-action@v4
         with:
-          images: ${{ secrets.DOCKERHUB_REPOSITORY }}/mucoll-dummy
+          images: ${{ env.REGISTRY }}/mucoll-dummy
       -
-        name: Build and Push (mucoll-environment)
-        id: docker_build_mucoll-environment
-        uses: docker/build-push-action@v2
+        name: Build and Push (mucoll-spack)
+        id: docker_build_mucoll-spack
+        uses: docker/build-push-action@v4
         with:
           push: true
-          context: ./CentOS8
-          file: ./CentOS8/Dockerfile-environment
-          tags: ${{ secrets.DOCKERHUB_REPOSITORY }}/mucoll-environment:${{steps.meta.outputs.version}}-centos8
-      -
-        name: Build and Push (mucoll-ilc-base)
-        id: docker_build_mucoll-ilc-base
-        uses: docker/build-push-action@v2
-        with:
-          push: true
-          context: ./CentOS8
-          file: ./CentOS8/Dockerfile-ilc-base
+          context: ./${{matrix.os.dir}}
+          file: ./${{matrix.os.dir}}/Dockerfile-spack
           build-args: |
             VERSION=${{ steps.meta.outputs.version }}
-            REPOSITORY=${{ secrets.DOCKERHUB_REPOSITORY }}
-          tags: ${{ secrets.DOCKERHUB_REPOSITORY }}/mucoll-ilc-base:${{steps.meta.outputs.version}}-centos8
+            REPOSITORY=${{ env.REGISTRY }}
+          tags: ${{ env.REGISTRY }}/mucoll-spack:${{steps.meta.outputs.version}}-${{matrix.os.suffix}}
       -
-        name: Build and Push (mucoll-ilc-framework)
-        id: docker_build_mucoll-ilc-framework
-        uses: docker/build-push-action@v2
+        name: Build and Push (mucoll-sim)
+        id: docker_build_mucoll-sim
+        uses: docker/build-push-action@v4
         with:
           push: true
-          context: ./CentOS8
-          file: ./CentOS8/Dockerfile-ilc-framework
+          context: ./${{matrix.os.dir}}
+          file: ./${{matrix.os.dir}}/Dockerfile-sim
           build-args: |
             VERSION=${{ steps.meta.outputs.version }}
-            REPOSITORY=${{ secrets.DOCKERHUB_REPOSITORY }}
-          tags: ${{ secrets.DOCKERHUB_REPOSITORY }}/mucoll-ilc-framework:${{steps.meta.outputs.version}}-centos8
+            REPOSITORY=${{ env.REGISTRY }}
+          tags: ${{ env.REGISTRY }}/mucoll-sim:${{steps.meta.outputs.version}}-${{matrix.os.suffix}}
