@@ -32,14 +32,16 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      - name: lowercase repository name
+      - name: lowercase owner name
         run: |
-            echo "REPONAME={${{ github.repository_owner }},,}" >>${GITHUB_ENV}
+            echo "OWNER_LC=${OWNER,,}" >>${GITHUB_ENV}
+        env:
+            OWNER: '${{ github.repository_owner }}'
       - name: Docker Meta
         id: meta
         uses: docker/metadata-action@v4
         with:
-          images: ghcr.io/${REPONAME}/mucoll-dummy
+          images: ghcr.io/${OWNER_LC}/mucoll-dummy
       - name: Build and Push (mucoll-spack)
         id: docker_build_mucoll-spack
         uses: docker/build-push-action@v4
@@ -49,8 +51,8 @@ jobs:
           file: ./${{matrix.os.dir}}/Dockerfile-spack
           build-args: |
             VERSION=${{ steps.meta.outputs.version }}
-            REPOSITORY=ghcr.io/${REPONAME}
-          tags: ghcr.io/${REPONAME}/mucoll-spack:${{steps.meta.outputs.version}}-${{matrix.os.suffix}}
+            REPOSITORY=ghcr.io/${OWNER_LC}
+          tags: ghcr.io/${OWNER_LC}/mucoll-spack:${{steps.meta.outputs.version}}-${{matrix.os.suffix}}
       - name: Build and Push (mucoll-sim)
         id: docker_build_mucoll-sim
         uses: docker/build-push-action@v4
@@ -60,5 +62,5 @@ jobs:
           file: ./${{matrix.os.dir}}/Dockerfile-sim
           build-args: |
             VERSION=${{ steps.meta.outputs.version }}
-            REPOSITORY=ghcr.io/${REPONAME}
-          tags: ghcr.io/${REPONAME}/mucoll-sim:${{steps.meta.outputs.version}}-${{matrix.os.suffix}}
+            REPOSITORY=ghcr.io/${OWNER_LC}
+          tags: ghcr.io/${OWNER_LC}/mucoll-sim:${{steps.meta.outputs.version}}-${{matrix.os.suffix}}
