@@ -28,7 +28,22 @@ RUN source /opt/spack/share/spack/setup-env.sh && \
     spack repo add /opt/mucoll-spack && \
     spack env create mucoll-env /opt/mucoll-spack/environments/mucoll-release/spack.yaml && \
     spack env activate mucoll-env && spack add mucoll-stack && \
-    spack concretize --reuse --deprecated && spack install --fail-fast --deprecated
+    spack concretize --reuse --deprecated
+
+RUN source /opt/spack/share/spack/setup-env.sh && \
+    spack env activate mucoll-env && \
+    spack install --fail-fast --deprecated root
+
+RUN source /opt/spack/share/spack/setup-env.sh && \
+    spack env activate mucoll-env && \
+    spack install --fail-fast --deprecated geant4
+
+RUN source /opt/spack/share/spack/setup-env.sh && \
+    spack env activate mucoll-env && \
+    spack install --fail-fast --deprecated
+
+RUN rm -f /etc/profile.d/spack-setup.sh && \
+    echo "source /opt/spack/share/spack/setup-env.sh" > /etc/profile.d/spack-setup.sh
 
 ENTRYPOINT [ "/bin/bash" ]
 
