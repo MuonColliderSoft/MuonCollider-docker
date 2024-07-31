@@ -1,0 +1,11 @@
+###############################################################################
+#  Repository: mucoll-ilc-framework
+#  Tag:        1.7-almalinux9
+###############################################################################
+
+FROM infnpd/mucoll-ilc-base:1.7-almalinux9
+
+RUN cd /opt/iLCInstall && \
+    ./ilcsoft-install releases/v02-08-MC/release-muonc.cfg --install-prefix=/opt/ilcsoft -v -i
+
+COPY profile.d_ilcsoft.sh /etc/profile.d/ilcsoft.sh
