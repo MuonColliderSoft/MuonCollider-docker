@@ -1,6 +1,6 @@
 ###############################################################################
 #  Repository: mucoll-minimal
-#  Tag:        2.9-almalinux9
+#  Tag:        2.9.1-almalinux9
 ###############################################################################
 
 FROM almalinux:9.4
@@ -9,8 +9,10 @@ RUN yum -y install epel-release wget yum-utils && \
     yum-config-manager --set-enabled appstream crb extras plus && \
     wget -O /etc/yum.repos.d/geant4.repo https://nexus.pd.infn.it/artifacts/repository/repo-files/geant4.repo && \
     wget -O /etc/yum.repos.d/mc-key4hep.repo https://nexus.pd.infn.it/artifacts/repository/repo-files/mc-key4hep.repo && \
-    yum -y install muonc-base-installation key4hep-marlin-wrapper python3-k4fwcore && \
+    yum -y install muonc-base-installation python3-k4marlin-wrapper gaudi-tools gaudi-devel && \
     geant4-dataset-download
+
+ENTRYPOINT [ "/bin/bash" ]
 
 #TODO publish according to https://awesome-workshop.github.io/docker-cms/06-unpacked/index.html
 
