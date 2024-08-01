@@ -15,7 +15,7 @@ on:
 jobs:
   build:
     runs-on: self-hosted
-    timeout-minutes: 720
+    timeout-minutes: 1440
     strategy:
       matrix:
         os: [{dir: AlmaLinux9,suffix: alma9}]
