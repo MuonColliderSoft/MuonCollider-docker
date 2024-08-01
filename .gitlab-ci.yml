@@ -16,7 +16,7 @@ stages:
     DESTINATION: 'ghcr.io/$CI_REGISTRY_USER/${IMAGE}:${VERSION}-${OSTAG}'
   before_script:
     # Prepare Kaniko configuration file
-    - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" > /kaniko/.docker/config.json
+    - echo "{\"auths\":{\"ghcr.io\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" > /kaniko/.docker/config.json
   script:
     - printenv
     # Build and push the image from the given Dockerfile
