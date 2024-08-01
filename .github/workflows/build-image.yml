@@ -1,16 +1,16 @@
 name: build-image
 on:
-  push:
-    branches:
-      - 'master'
-      - 'main'
-      - 'key4hep*'
-    tags:
-      - 'v*'
-  pull_request:
-    branches:
-      - 'master'
-      - 'main'
+  #push:
+  #  branches:
+  #    - 'master'
+  #    - 'main'
+  #    - 'key4hep*'
+  #  tags:
+  #    - 'v*'
+  #pull_request:
+  #  branches:
+  #    - 'master'
+  #    - 'main'
   workflow_dispatch:
 jobs:
   build:
