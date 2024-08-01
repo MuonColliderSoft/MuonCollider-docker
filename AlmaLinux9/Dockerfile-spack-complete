@@ -42,6 +42,7 @@ RUN source /opt/spack/share/spack/setup-env.sh && \
     spack install --fail-fast --deprecated
 
 RUN echo "source /opt/spack/share/spack/setup-env.sh" > /etc/profile.d/spack-setup.sh && \
+    source /opt/spack/share/spack/setup-env.sh && \
     spack clean -sdf
 
 ENTRYPOINT [ "/bin/bash" ]
