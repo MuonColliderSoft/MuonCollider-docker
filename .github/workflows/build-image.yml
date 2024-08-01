@@ -1,21 +1,9 @@
 name: build-image
 on:
-  push:
-    branches:
-      - 'master'
-      - 'main'
-      - 'key4hep*'
-    tags:
-      - 'v*'
-  pull_request:
-    branches:
-      - 'master'
-      - 'main'
   workflow_dispatch:
 jobs:
   build:
-    runs-on: self-hosted
-    timeout-minutes: 1440
+    runs-on: ubuntu-latest
     strategy:
       matrix:
         os: [{dir: AlmaLinux9,suffix: alma9}]
