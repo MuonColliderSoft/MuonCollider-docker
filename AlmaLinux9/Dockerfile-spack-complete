@@ -19,8 +19,7 @@ RUN cd /opt && git clone -c feature.manyFiles=true https://github.com/spack/spac
     cd /opt && git clone https://github.com/key4hep/key4hep-spack.git && \
     cd key4hep-spack && git checkout dc0b2bc4aaad8f3ef5f3c7f62ff5b0277a554eee && \
     cd /opt && git clone https://github.com/MuonColliderSoft/mucoll-spack.git && \
-    cd mucoll-spack && git checkout v2.9 && \
-    cp /opt/spack/share/spack/setup-env.sh /etc/profile.d/spack-setup.sh
+    cd mucoll-spack && git checkout v2.9
 
 RUN source /opt/spack/share/spack/setup-env.sh && \
     spack spec clingo && spack compilers && \
@@ -42,8 +41,8 @@ RUN source /opt/spack/share/spack/setup-env.sh && \
     spack env activate mucoll-env && \
     spack install --fail-fast --deprecated
 
-RUN rm -f /etc/profile.d/spack-setup.sh && \
-    echo "source /opt/spack/share/spack/setup-env.sh" > /etc/profile.d/spack-setup.sh
+RUN echo "source /opt/spack/share/spack/setup-env.sh" > /etc/profile.d/spack-setup.sh && \
+    spack clean -sdf
 
 ENTRYPOINT [ "/bin/bash" ]
 
