@@ -13,10 +13,10 @@ stages:
     VERSION: ${CI_COMMIT_REF_SLUG}
     OSTAG: <Tag suffix corresponding to version>
     # Use single quotes to escape colon
-    DESTINATION: '${CI_REGISTRY_IMAGE}/${IMAGE}:${VERSION}-${OSTAG}'
+    DESTINATION: 'ghcr.io/$GH_REGISTRY_USER/${IMAGE}:${VERSION}-${OSTAG}'
   before_script:
     # Prepare Kaniko configuration file
-    - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" > /kaniko/.docker/config.json
+    - echo "{\"auths\":{\"ghcr.io\":{\"username\":\"$GH_REGISTRY_USER\",\"password\":\"$GH_TOKEN\"}}}" > /kaniko/.docker/config.json
   script:
     - printenv
     # Build and push the image from the given Dockerfile
@@ -48,6 +48,7 @@ build-spack:
 
 build-sim:
   extends: .build_template
+  timeout: 12h   # set job timeout to 12 hours
   variables:
     IMAGE: mucoll-sim
   needs: [build-spack]
