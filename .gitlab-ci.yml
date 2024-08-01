@@ -48,6 +48,7 @@ build-spack:
 
 build-sim:
   extends: .build_template
+  timeout: 12h   # set job timeout to 12 hours
   variables:
     IMAGE: mucoll-sim
   needs: [build-spack]
