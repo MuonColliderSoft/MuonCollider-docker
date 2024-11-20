@@ -5,6 +5,7 @@ on:
       - 'master'
       - 'main'
       - 'key4hep*'
+      - '2.10'
     tags:
       - 'v*'
   pull_request:
@@ -28,19 +29,13 @@ jobs:
       - name: Login to DockerHub
         uses: docker/login-action@v3
         with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GHCR_TOKEN }}
-      - name: lowercase owner name
-        run: |
-            echo "OWNER_LC=${OWNER,,}" >>${GITHUB_ENV}
-        env:
-            OWNER: '${{ github.repository_owner }}'
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
       - name: Docker Meta
         id: meta
         uses: docker/metadata-action@v4
         with:
-          images: ghcr.io/${{env.OWNER_LC}}/mucoll-dummy
+          images: ${{ secrets.DOCKERHUB_REPOSITORY }}/mucoll-dummy
       - name: Build and Push
         id: docker_build
         uses: docker/build-push-action@v6
@@ -50,8 +45,8 @@ jobs:
           file: ./${{matrix.os.dir}}/Dockerfile-spack
           build-args: |
             VERSION=${{ steps.meta.outputs.version }}
-            REPOSITORY=ghcr.io/${{env.OWNER_LC}}
-          tags: ghcr.io/${{env.OWNER_LC}}/mucoll-spack:${{steps.meta.outputs.version}}-${{matrix.os.suffix}}
+            REPOSITORY=ghcr.io/${{ secrets.DOCKERHUB_REPOSITORY }}
+          tags: ${{ secrets.DOCKERHUB_REPOSITORY }}/mucoll-spack:${{steps.meta.outputs.version}}-${{matrix.os.suffix}}
   build-base:
     runs-on: ubuntu-latest
     needs: build-spack
