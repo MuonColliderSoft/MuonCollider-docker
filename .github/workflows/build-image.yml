@@ -1,10 +1,10 @@
-name: build-image
+name: Build and Publish Docker Images
+
 on:
   push:
     branches:
       - 'master'
       - 'main'
-      - 'key4hep*'
       - '2.10'
     tags:
       - 'v*'
@@ -13,18 +13,24 @@ on:
       - 'master'
       - 'main'
   workflow_dispatch:
+
+env:
+  REGISTRY: ghcr.io
+
 permissions:
   contents: read
-  pages: write
   packages: write
   id-token: write
   attestations: write
+
 jobs:
   build-spack:
     runs-on: ubuntu-latest
     strategy:
       matrix:
         os: [{dir: AlmaLinux9,suffix: alma9}]
+    env:
+      IMAGE_NAME: mucoll-spack
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -35,7 +41,7 @@ jobs:
       - name: Login to DockerHub
         uses: docker/login-action@v3
         with:
-          registry: ghcr.io
+          registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: lowercase owner name
@@ -43,26 +49,27 @@ jobs:
             echo "OWNER_LC=${OWNER,,}" >>${GITHUB_ENV}
         env:
             OWNER: '${{ github.repository_owner }}'
-      - name: Docker Meta
+      - name: Extract metadata for Docker
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: ghcr.io/${{env.OWNER_LC}}/mucoll-dummy
+          images: ${{ env.REGISTRY }}/${{env.OWNER_LC}}/mucoll-dummy
       - name: Build and Push
         id: docker_build
         uses: docker/build-push-action@v6
         with:
-          push: true
           context: ./${{matrix.os.dir}}
           file: ./${{matrix.os.dir}}/Dockerfile-spack
+          push: true
           build-args: |
             VERSION=${{ steps.meta.outputs.version }}
-            REPOSITORY=ghcr.io/${{env.OWNER_LC}}
-          tags: ghcr.io/${{env.OWNER_LC}}/mucoll-spack:${{steps.meta.outputs.version}}-${{matrix.os.suffix}}
+            REPOSITORY=${{ env.REGISTRY }}/${{env.OWNER_LC}}
+          tags: ${{ env.REGISTRY }}/${{env.OWNER_LC}}/${{ env.IMAGE_NAME}}:${{steps.meta.outputs.version}}-${{matrix.os.suffix}}
+          labels: ${{ steps.meta.outputs.labels }}
       - name: Generate artifact attestation
         uses: actions/attest-build-provenance@v1
         with:
-          subject-name: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME}}
+          subject-name: ${{ env.REGISTRY }}/${{env.OWNER_LC}}/${{ env.IMAGE_NAME}}
           subject-digest: ${{ steps.push.outputs.digest }}
           push-to-registry: true  
   build-base:
