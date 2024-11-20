@@ -4,7 +4,6 @@
 ###############################################################################
 
 ARG VERSION=release
-ARG REPOSITORY=infnpd
 FROM gitlab-registry.cern.ch/key4hep/k4-deploy/alma9-build
 
 # Add the new Certificate Authority (needed for xrootd)
