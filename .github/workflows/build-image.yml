@@ -39,7 +39,7 @@ jobs:
             OWNER: '${{ github.repository_owner }}'
       - name: Docker Meta
         id: meta
-        uses: docker/metadata-action@v4
+        uses: docker/metadata-action@v5
         with:
           images: ghcr.io/${{env.OWNER_LC}}/mucoll-dummy
       - name: Build and Push
@@ -79,7 +79,7 @@ jobs:
             OWNER: '${{ github.repository_owner }}'
       - name: Docker Meta
         id: meta
-        uses: docker/metadata-action@v4
+        uses: docker/metadata-action@v5
         with:
           images: ghcr.io/${{env.OWNER_LC}}/mucoll-dummy
       - name: Build and Push
@@ -119,7 +119,7 @@ jobs:
             OWNER: '${{ github.repository_owner }}'
       - name: Docker Meta
         id: meta
-        uses: docker/metadata-action@v4
+        uses: docker/metadata-action@v5
         with:
           images: ghcr.io/${{env.OWNER_LC}}/mucoll-dummy
       - name: Build and Push
