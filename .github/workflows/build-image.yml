@@ -32,8 +32,6 @@ jobs:
     env:
       IMAGE_NAME: mucoll-spack
     steps:
-      - name: Free up disk space
-        run: rm -rf /opt/hostedtoolcache
       - name: Checkout
         uses: actions/checkout@v4
         with:
@@ -68,19 +66,19 @@ jobs:
             REPOSITORY=${{ env.REGISTRY }}/${{env.OWNER_LC}}
           tags: ${{ env.REGISTRY }}/${{env.OWNER_LC}}/${{ env.IMAGE_NAME}}:${{steps.meta.outputs.version}}-${{matrix.os.suffix}}
           labels: ${{ steps.meta.outputs.labels }}
-      - name: Generate artifact attestation
-        uses: actions/attest-build-provenance@v1
-        with:
-          subject-name: ${{ env.REGISTRY }}/${{env.OWNER_LC}}/${{ env.IMAGE_NAME}}
-          subject-digest: ${{ steps.push.containerimage.digest }}
-          push-to-registry: true  
   build-base:
     runs-on: ubuntu-latest
     needs: build-spack
     strategy:
       matrix:
         os: [{dir: AlmaLinux9,suffix: alma9}]
+    env:
+      IMAGE_NAME: mucoll-minimal
     steps:
+      - name: Free Disk Space (Ubuntu)
+        uses: jlumbroso/free-disk-space@v1
+        with:
+          tool-cache: true
       - name: Checkout
         uses: actions/checkout@v4
         with:
@@ -90,7 +88,7 @@ jobs:
       - name: Login to DockerHub
         uses: docker/login-action@v3
         with:
-          registry: ghcr.io
+          registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: lowercase owner name
@@ -102,7 +100,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: ghcr.io/${{env.OWNER_LC}}/mucoll-dummy
+          images: ${{ env.REGISTRY }}/${{env.OWNER_LC}}/mucoll-dummy
       - name: Build and Push
         id: docker_build
         uses: docker/build-push-action@v6
@@ -112,8 +110,9 @@ jobs:
           file: ./${{matrix.os.dir}}/Dockerfile-base
           build-args: |
             VERSION=${{ steps.meta.outputs.version }}
-            REPOSITORY=ghcr.io/${{env.OWNER_LC}}
-          tags: ghcr.io/${{env.OWNER_LC}}/mucoll-base:${{steps.meta.outputs.version}}-${{matrix.os.suffix}}
+            REPOSITORY=${{ env.REGISTRY }}/${{env.OWNER_LC}}
+          tags: ${{ env.REGISTRY }}/${{env.OWNER_LC}}/${{ env.IMAGE_NAME}}:${{steps.meta.outputs.version}}-${{matrix.os.suffix}}
+          labels: ${{ steps.meta.outputs.labels }}
   build-sim:
     runs-on: ubuntu-latest
     needs: build-base
@@ -121,6 +120,10 @@ jobs:
       matrix:
         os: [{dir: AlmaLinux9,suffix: alma9}]
     steps:
+      - name: Free Disk Space (Ubuntu)
+        uses: jlumbroso/free-disk-space@v1
+        with:
+          tool-cache: true
       - name: Checkout
         uses: actions/checkout@v4
         with:
@@ -130,7 +133,7 @@ jobs:
       - name: Login to DockerHub
         uses: docker/login-action@v3
         with:
-          registry: ghcr.io
+          registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: lowercase owner name
@@ -142,7 +145,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: ghcr.io/${{env.OWNER_LC}}/mucoll-dummy
+          images: ${{ env.REGISTRY }}/${{env.OWNER_LC}}/mucoll-dummy
       - name: Build and Push
         id: docker_build
         uses: docker/build-push-action@v6
@@ -152,5 +155,5 @@ jobs:
           file: ./${{matrix.os.dir}}/Dockerfile-sim
           build-args: |
             VERSION=${{ steps.meta.outputs.version }}
-            REPOSITORY=ghcr.io/${{env.OWNER_LC}}
-          tags: ghcr.io/${{env.OWNER_LC}}/mucoll-sim:${{steps.meta.outputs.version}}-${{matrix.os.suffix}}
+            REPOSITORY=${{ env.REGISTRY }}/${{env.OWNER_LC}}
+          tags: ${{ env.REGISTRY }}/${{env.OWNER_LC}}/mucoll-sim:${{steps.meta.outputs.version}}-${{matrix.os.suffix}}
