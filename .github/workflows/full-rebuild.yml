@@ -6,8 +6,6 @@ on:
       - 'master'
       - 'main'
       - '2.10'
-    paths:
-      - 'AlmaLinux9/**'
     tags:
       - 'v*'
   pull_request:
