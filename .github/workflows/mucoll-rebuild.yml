@@ -2,10 +2,6 @@ name: Re-build and publish MuColl
 
 on:
   push:
-    branches:
-      - 'master'
-      - 'main'
-      - '2.10'
     paths:
         - 'AlmaLinux9/Dockerfile-sim'
   workflow_dispatch:
