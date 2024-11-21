@@ -1,4 +1,4 @@
-name: Build and Publish Docker Images
+name: Re-build and publish everything
 
 on:
   push:
@@ -6,6 +6,8 @@ on:
       - 'master'
       - 'main'
       - '2.10'
+    paths:
+      - 'MuonCollider-docker/AlmaLinux9/Dockerfile-spack'
     tags:
       - 'v*'
   pull_request:
@@ -121,7 +123,7 @@ jobs:
         os: [{dir: AlmaLinux9,suffix: alma9}]
     steps:
       - name: Free Disk Space (Ubuntu)
-        uses: jlumbroso/free-disk-space@v1
+        uses: jlumbroso/free-disk-space@main
         with:
           tool-cache: true
       - name: Checkout
