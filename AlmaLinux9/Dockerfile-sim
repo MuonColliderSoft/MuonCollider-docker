@@ -8,7 +8,7 @@ ARG REPOSITORY=madbaron
 FROM ${REPOSITORY}/mucoll-minimal:${VERSION}-alma9
 
 # Adding repository: MuColl
-ARG MUCOLL_COMMIT=c77399b9f1500dd4ad80fcaa067ae44fb566503e
+ARG MUCOLL_COMMIT=11a32828ca9230337562dc43f91a25862d3a21ff
 
 RUN source /opt/setup_spack.sh && \
     REPOPATH=${SPACK_ROOT}/var/mucoll-spack && \
