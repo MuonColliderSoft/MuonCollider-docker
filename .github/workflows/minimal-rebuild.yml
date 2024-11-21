@@ -2,10 +2,6 @@ name: Re-build and publish Minimal
 
 on:
   push:
-    branches:
-      - 'master'
-      - 'main'
-      - '2.10'
     paths:
         - 'AlmaLinux9/Dockerfile-base'
   workflow_dispatch:
