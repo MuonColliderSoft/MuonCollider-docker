@@ -7,7 +7,7 @@ on:
       - 'main'
       - '2.10'
     paths:
-        - 'MuonCollider-docker/AlmaLinux9/Dockerfile-sim'
+        - 'AlmaLinux9/Dockerfile-sim'
   workflow_dispatch:
 
 env:
